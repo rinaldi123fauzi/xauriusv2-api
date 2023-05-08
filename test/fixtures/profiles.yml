@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: profiles
+#
+#  id           :bigint           not null, primary key
+#  full_name    :string
+#  phone_number :string
+#  address      :string
+#  id_number    :integer
+#  npwp_number  :string
+#  deposit      :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  user_id      :bigint           not null
+#
+
+one:
+  full_name: MyString
+  phone_number: 1
+  address: MyString
+  id_number: 1
+  npwp_number: MyString
+  deposit: 1
+
+two:
+  full_name: MyString
+  phone_number: 1
+  address: MyString
+  id_number: 1
+  npwp_number: MyString
+  deposit: 1

@@ -1,0 +1,31 @@
+# == Schema Information
+#
+# Table name: sells
+#
+#  id         :bigint           not null, primary key
+#  sell       :decimal(, )
+#  summary    :decimal(, )
+#  date       :datetime
+#  quantity   :decimal(, )
+#  price      :decimal(, )
+#  status     :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  user_id    :bigint           not null
+#
+
+one:
+  sell: 1
+  summary: 1
+  date: 2023-03-06 14:46:49
+  quantity: 1
+  price: 1
+  status: 1
+
+two:
+  sell: 1
+  summary: 1
+  date: 2023-03-06 14:46:49
+  quantity: 1
+  price: 1
+  status: 1

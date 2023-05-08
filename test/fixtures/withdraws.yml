@@ -1,0 +1,29 @@
+# == Schema Information
+#
+# Table name: withdraws
+#
+#  id             :bigint           not null, primary key
+#  name_bank      :string
+#  account_number :integer
+#  cash_balance   :decimal(, )
+#  ammount        :decimal(, )
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  date           :datetime
+#  order          :string
+#  withdraw       :decimal(, )
+#  status         :integer
+#  user_id        :bigint           not null
+#
+
+one:
+  name_bank: MyString
+  account_number: 1
+  cash_balance: 1
+  ammount: 1
+
+two:
+  name_bank: MyString
+  account_number: 1
+  cash_balance: 1
+  ammount: 1
