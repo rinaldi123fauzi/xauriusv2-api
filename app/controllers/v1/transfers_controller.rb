@@ -12,7 +12,7 @@ module V1
       }
     end
     def show
-      transfers = Transfer.find(params[:id])
+      transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
@@ -55,6 +55,14 @@ module V1
     private
     def transfer_params
       params.require(:transfer).permit(:network,:address_wallet,:date,:tx_hash,:address,:quantity,:status,:user_id)
+    end
+
+    def decoded_auth_token
+      if request.headers["JWT"]
+        @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
+      else
+        @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
     end
 
     def authenticate_request

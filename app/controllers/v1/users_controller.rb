@@ -12,7 +12,7 @@ module V1
       }
     end
     def show
-      users = User.find(params[:id])
+      users = User.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
@@ -54,6 +54,14 @@ module V1
     private
     def profile_params
       params.require(:user).permit(:username,:password,:name,:email,:is_active,:is_email_verify,:is_usaha)
+    end
+
+    def decoded_auth_token
+      if request.headers["JWT"]
+        @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
+      else
+        @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
     end
 
     def authenticate_request
