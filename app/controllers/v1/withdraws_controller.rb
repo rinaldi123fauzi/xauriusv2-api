@@ -12,7 +12,7 @@ module V1
       }
     end
     def show
-      withdraws = Withdraw.find(params[:id])
+      withdraws = Withdraw.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
@@ -56,6 +56,14 @@ module V1
     private
     def withdraw_params
       params.require(:withdraw).permit(:name_bank,:account_number,:cash_balance,:ammount,:date,:withdraw,:status,:user_id)
+    end
+
+    def decoded_auth_token
+      if request.headers["JWT"]
+        @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
+      else
+        @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
     end
 
     def authenticate_request

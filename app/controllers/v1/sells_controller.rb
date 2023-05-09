@@ -12,7 +12,7 @@ module V1
       }
     end
     def show
-      sells = Sell.find(params[:id])
+      sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
@@ -54,6 +54,14 @@ module V1
     private
     def sell_params
       params.require(:sell).permit(:sell,:summary,:date,:price,:quantity,:status,:user_id)
+    end
+
+    def decoded_auth_token
+      if request.headers["JWT"]
+        @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
+      else
+        @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
     end
 
     def authenticate_request

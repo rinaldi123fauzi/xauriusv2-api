@@ -12,7 +12,7 @@ module V1
       }
     end
     def show
-      deposits = Deposit.find(params[:id])
+      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
@@ -54,6 +54,14 @@ module V1
     private
     def deposit_params
       params.require(:deposit).permit(:name_bank,:unit_price,:quantity,:total,:date,:order, :user_id)
+    end
+
+    def decoded_auth_token
+      if request.headers["JWT"]
+        @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
+      else
+        @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
     end
 
     def authenticate_request
