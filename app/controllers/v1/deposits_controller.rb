@@ -31,6 +31,15 @@ module V1
       @deposits.order = params[:order]
       @deposits.user_id = params[:user_id]
       if @deposits.save
+        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+        if @checkBalances
+          @checkBalances.update(balance_value: params[:total])          
+          @checkBalances.update(currency: params[:currency])
+        else
+          @balance = Balance.new
+          @balance.balance_value = params[:total]          
+          @balance.currency = params[:currency]          
+        end
         render json: {success: true, message:'Deposits is saved', data:@deposits}, status: :ok
       else
         render json: {success: false, message:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
@@ -46,6 +55,10 @@ module V1
       deposits.update(date: params[:date])
       deposits.update(order: params[:order])
       deposits.update(user_id: params[:user_id])
+
+      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+      @checkBalances.update(balance_value: params[:total])          
+      @checkBalances.update(currency: params[:currency])
       render json: {success: true, message:'Deposit is update', data:deposits}, status: :ok
     end
 

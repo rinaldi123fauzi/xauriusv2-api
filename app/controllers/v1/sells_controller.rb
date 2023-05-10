@@ -31,6 +31,10 @@ module V1
       @sells.status = params[:status]
       @sells.user_id = params[:user_id]
       if @sells.save
+        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+        @sum = @checkBalances.balance_value - params[:sell]
+        @checkBalances.update(balance_value: @sum)          
+        @checkBalances.update(currency: params[:currency])
         render json: {success: true, message:'Sells is saved', data:@sells}, status: :ok
       else
         render json: {success: false, message:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity

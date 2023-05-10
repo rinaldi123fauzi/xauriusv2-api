@@ -32,6 +32,10 @@ module V1
       @withdraws.status = params[:status]
       @withdraws.user_id = params[:user_id]
       if @withdraws.save
+        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+        @sum = @checkBalances.balance_value - params[:withdraw]
+        @checkBalances.update(balance_value: @sum)          
+        @checkBalances.update(currency: params[:currency])
         render json: {success: true, message:'Withdraws is saved', data:@withdraws}, status: :ok
       else
         render json: {success: false, message:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
