@@ -4,13 +4,14 @@ module V1
     before_action :authenticate_request
 
     def index
-      deposits = Deposit.all
+      deposits = Deposit.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
         data: deposits
       }
     end
+
     def show
       deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
@@ -19,6 +20,7 @@ module V1
         data: deposits
       }
     end
+
     def create
       @deposits = Deposit.new
       @deposits.name_bank = params[:name_bank]
@@ -34,8 +36,9 @@ module V1
         render json: {success: false, message:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
       end
     end
+
     def update
-      deposits = Deposit.find(params[:id])
+      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
       deposits.update(name_bank: params[:name_bank])
       deposits.update(unit_price: params[:unit_price])
       deposits.update(quantity: params[:quantity])
@@ -45,8 +48,9 @@ module V1
       deposits.update(user_id: params[:user_id])
       render json: {success: true, message:'Deposit is update', data:deposits}, status: :ok
     end
+
     def destroy
-      deposits = Deposit.find(params[:id])
+      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
       deposits.destroy!
       render json: {success: true, message:'Deposit has been deleted', data:deposits}, status: :ok
     end

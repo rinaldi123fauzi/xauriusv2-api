@@ -4,13 +4,14 @@ module V1
     before_action :authenticate_request
 
     def index
-      transfers = Transfer.all
+      transfers = Transfer.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
         data: transfers
       }
     end
+
     def show
       transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
@@ -19,6 +20,7 @@ module V1
         data: transfers
       }
     end
+
     def create
       @transfers = Transfer.new
       @transfers.network = params[:network]
@@ -35,8 +37,9 @@ module V1
         render json: {success: false, message:'Transfers is not saved', data:@transfers.errors}, status: :unprocessable_entity
       end
     end
+
     def update
-      @transfers = Transfer.find(params[:id])
+      @transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
       @transfers.update(network: params[:network])
       @transfers.update(address_wallet: params[:address_wallet])
       @transfers.update(date: params[:date])
@@ -46,8 +49,9 @@ module V1
       @transfers.update(status: params[:status])
       render json: {success: true, message:'Transfers is update', data:@transfers}, status: :ok
     end
+
     def destroy
-      transfers = Transfer.find(params[:id])
+      transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
       transfers.destroy!
       render json: {success: true, message:'Transfers has been deleted', data:transfers}, status: :ok
     end

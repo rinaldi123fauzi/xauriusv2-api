@@ -12,9 +12,12 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
+#  status       :boolean          default(FALSE)
 #
 
 # TODO: Buat status KYC
 class Profile < ApplicationRecord
     belongs_to :user
+    has_one_attached :file_npwp
+    has_one_attached :file_ktp
 end

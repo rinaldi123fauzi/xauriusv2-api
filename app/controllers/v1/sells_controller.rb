@@ -4,13 +4,14 @@ module V1
     before_action :authenticate_request
 
     def index
-      sells = Sell.all
+      sells = Sell.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
         data: sells
       }
     end
+
     def show
       sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
@@ -19,6 +20,7 @@ module V1
         data: sells
       }
     end
+
     def create
       @sells = Sell.new
       @sells.sell = params[:sell]
@@ -34,8 +36,9 @@ module V1
         render json: {success: false, message:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
       end
     end
+
     def update
-      @sells = Sell.find(params[:id])
+      @sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
       @sells.update(sell: params[:sell])
       @sells.update(summary: params[:summary])
       @sells.update(date: params[:date])
@@ -45,8 +48,9 @@ module V1
       @sells.update(user_id: params[:user_id])
       render json: {success: true, message:'Sells is update', data:@sells}, status: :ok
     end
+
     def destroy
-      sells = Sell.find(params[:id])
+      sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
       sells.destroy!
       render json: {success: true, message:'Sells has been deleted', data:sells}, status: :ok
     end
