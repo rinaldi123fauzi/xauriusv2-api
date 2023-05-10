@@ -13,6 +13,9 @@
 #  order      :string
 #  user_id    :bigint           not null
 #
+
+# TODO
+# buat column status yang nanti isinya create, waiting-fo-payment, expire, complete
 class Deposit < ApplicationRecord
     belongs_to :user
 end

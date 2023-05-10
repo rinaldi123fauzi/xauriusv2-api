@@ -13,6 +13,8 @@
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
 #
+
+# TODO: Buat status KYC
 class Profile < ApplicationRecord
     belongs_to :user
 end
