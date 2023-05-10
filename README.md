@@ -24,3 +24,15 @@ Things you may want to cover:
 * test
 
 * ...
+
+# TODO
+- Buat table balances
+  - user_id
+  - balance
+  - currency
+
+- Usahakan spasi setelah def
+
+- hapus controller yang tidak terpakai diluar
+
+- Perbaiki lagi response-response contoh yang ada di postman
