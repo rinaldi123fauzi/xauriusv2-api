@@ -8,7 +8,6 @@
 #  address      :string
 #  id_number    :integer
 #  npwp_number  :string
-#  deposit      :integer
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
