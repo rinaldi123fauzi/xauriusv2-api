@@ -295,8 +295,8 @@ module V1
         @orang.save
 
         # kirim email
-        # the_domain = "#{request.protocol}#{request.host_with_port}" # http://namadomain.com:port
-        # TheMailer.forgot_password_link(@orang, the_domain, @app_type).deliver_now
+        the_domain = "#{request.protocol}#{request.host_with_port}" # http://namadomain.com:port
+        TheMailer.forgot_password_link(@orang, the_domain, @app_type).deliver_now
 
         render json: {
           success: true,
