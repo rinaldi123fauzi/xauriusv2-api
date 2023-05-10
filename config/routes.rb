@@ -30,6 +30,11 @@ Rails.application.routes.draw do
       post 'signout'                          => 'auth#destroy'
     end
 
+    #KYC
+    scope :kyc do
+      post 'update'                       => 'kyc#edit_kyc'
+    end
+
     #Buys
     scope :buys do
       post 'create'                           => 'buys#create'

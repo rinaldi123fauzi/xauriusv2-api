@@ -29,7 +29,6 @@ module V1
         @profiles.address = params[:address]
         @profiles.id_number = params[:id_number]
         @profiles.npwp_number = params[:npwp_number]
-        @profiles.deposit = params[:deposit]
         @profiles.user_id = params[:user_id]
         @profiles.file_npwp = params[:file_npwp]
         @profiles.file_ktp = params[:file_ktp]
@@ -49,7 +48,6 @@ module V1
         @profiles.update(address: params[:address])
         @profiles.update(id_number: params[:id_number])
         @profiles.update(npwp_number: params[:npwp_number])
-        @profiles.update(deposit: params[:deposit])
         @profiles.update(user_id: params[:user_id])
         @profiles.update(file_npwp: params[:file_npwp])
         @profiles.update(file_ktp: params[:file_ktp])
