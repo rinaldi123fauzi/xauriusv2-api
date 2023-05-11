@@ -8,7 +8,7 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: profiles
+        data: profiles.as_json(include: :image)
       }
     end
 
@@ -54,6 +54,9 @@ module V1
         end
         if params[:file_ktp]
           @profiles.update(file_ktp: params[:file_ktp])
+        end
+        if params[:image]
+          @profiles.update(image: params[:image])
         end
       end
       render json: {success: true, message:'Profiles is update', data:@profiles}, status: :ok

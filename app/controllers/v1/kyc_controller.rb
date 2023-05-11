@@ -17,6 +17,9 @@ module V1
             if params[:file_ktp].present?
                 @profiles.update(file_ktp: params[:file_ktp])
             end
+            if params[:image].present?
+              @profiles.update(image: params[:image])
+          end
         end
         render json: {success: true, message:'KYC is update', data:@profiles}, status: :ok
       end
