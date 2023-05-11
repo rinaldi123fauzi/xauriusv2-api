@@ -28,6 +28,7 @@ class User < ApplicationRecord
     has_many :withdraw, dependent: :destroy
     has_many :transfer, dependent: :destroy
     has_many :profile, dependent: :destroy
+    has_one :balance, dependent: :destroy
     has_many :buy, dependent: :destroy
     has_many :sell, dependent: :destroy
 end

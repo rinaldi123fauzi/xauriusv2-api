@@ -4,13 +4,14 @@ module V1
     before_action :authenticate_request
 
     def index
-      buys = Buy.all
+      buys = Buy.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
         data: buys
       }
     end
+
     def show
       buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
@@ -19,6 +20,7 @@ module V1
         data: buys
       }
     end
+
     def create
       @buys = Buy.new
       @buys.spend = params[:spend]
@@ -34,8 +36,9 @@ module V1
         render json: {success: false, message:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
       end
     end
+
     def update
-      @buys = Buy.find(params[:id])
+      @buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
       @buys.update(spend: params[:spend])
       @buys.update(summary: params[:summary])
       @buys.update(date: params[:date])
@@ -45,8 +48,9 @@ module V1
       @buys.update(user_id: params[:user_id])
       render json: {success: true, message:'Buys is update', data:@buys}, status: :ok
     end
+
     def destroy
-      buys = Buy.find(params[:id])
+      buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
       buys.destroy!
       render json: {success: true, message:'Buys has been deleted', data:buys}, status: :ok
     end

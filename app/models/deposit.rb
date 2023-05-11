@@ -12,6 +12,7 @@
 #  date       :datetime
 #  order      :string
 #  user_id    :bigint           not null
+#  status     :string
 #
 
 # TODO

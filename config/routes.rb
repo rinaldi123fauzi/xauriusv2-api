@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :balances
   resources :businesses
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -28,6 +29,16 @@ Rails.application.routes.draw do
 
       post 'change-password'                  => 'auth#change_password'
       post 'signout'                          => 'auth#destroy'
+    end
+
+    #KYC
+    scope :kyc do
+      post 'update'                           => 'kyc#edit_kyc'
+    end
+
+    #Balances
+    scope :balances do
+      get '/'                                 => 'balances#index'
     end
 
     #Buys
