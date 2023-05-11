@@ -11,4 +11,4 @@ User.create(
     password: "123456",
     name: "superadmin",
     email: "superadmin@gmail.com"
-)
+).find_or_create_by!(email: "superadmin@gmail.com")
