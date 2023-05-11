@@ -70,11 +70,11 @@ Rails.application.routes.draw do
 
     #Sells
     scope :sells do
-      post 'create'                           => 'sells#create'
+      # post 'create'                           => 'sells#create'
       post 'update'                           => 'sells#update'
       get '/'                                 => 'sells#index'
       get 'detail'                            => 'sells#show'
-      delete 'delete'                         => 'sells#destroy'
+      # delete 'delete'                         => 'sells#destroy'
     end
 
     #Transfers
