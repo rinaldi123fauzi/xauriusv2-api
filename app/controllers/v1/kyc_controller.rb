@@ -4,22 +4,20 @@ module V1
       before_action :authenticate_request
 
       def edit_kyc
-        ActiveRecord::Base.transaction do
-            @profiles = Profile.find_by_user_id(decoded_auth_token[:user_id])
-            @profiles.update(full_name: params[:full_name])
-            @profiles.update(phone_number: params[:phone_number])
-            @profiles.update(address: params[:address])
-            @profiles.update(id_number: params[:id_number])
-            @profiles.update(npwp_number: params[:npwp_number])
-            if params[:file_npwp].present?
-                @profiles.update(file_npwp: params[:file_npwp])
-            end
-            if params[:file_ktp].present?
-                @profiles.update(file_ktp: params[:file_ktp])
-            end
-            if params[:image].present?
-              @profiles.update(image: params[:image])
-          end
+        @profiles = Profile.find_by_user_id(decoded_auth_token[:user_id])
+        @profiles.update(full_name: params[:full_name])
+        @profiles.update(phone_number: params[:phone_number])
+        @profiles.update(address: params[:address])
+        @profiles.update(id_number: params[:id_number])
+        @profiles.update(npwp_number: params[:npwp_number])
+        if params[:file_npwp].present?
+            @profiles.update(file_npwp: params[:file_npwp])
+        end
+        if params[:file_ktp].present?
+            @profiles.update(file_ktp: params[:file_ktp])
+        end
+        if params[:image].present?
+          @profiles.update(image: params[:image])
         end
         render json: {success: true, message:'KYC is update', data:@profiles}, status: :ok
       end
