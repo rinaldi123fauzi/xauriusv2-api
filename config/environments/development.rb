@@ -77,6 +77,7 @@ Rails.application.configure do
 
   config.hosts << "api.dev.xaurius.com"
   config.hosts << "newapi.dev.xaurius.com"
+  config.hosts << "newapi-ntz.dev.xaurius.com"
 
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp

@@ -7,14 +7,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
-  resources :users
-  resources :profiles
-  resources :transfers
-  resources :sells
-  resources :buys
-  resources :withdraws
-  resources :deposits
-  
   post 'authenticate', to: 'authentication#authenticate'
 
   namespace :v1 do
@@ -43,29 +35,27 @@ Rails.application.routes.draw do
 
     #Buys
     scope :buys do
+      get '/'                                 => 'buys#index'
       post 'create'                           => 'buys#create'
       post 'update'                           => 'buys#update'
-      get '/'                                 => 'buys#index'
       get 'detail'                            => 'buys#show'
       delete 'delete'                         => 'buys#destroy'
     end
 
     #Deposit
     scope :deposits do
+      get '/'                                 => 'deposits#index'
       post 'create'                           => 'deposits#create'
       post 'update'                           => 'deposits#update'
-      get '/'                                 => 'deposits#index'
       get 'detail'                            => 'deposits#show'
       delete 'delete'                         => 'deposits#destroy'
     end
 
     #Profiles
     scope :profiles do
-      post 'create'                           => 'profiles#create'
-      post 'update'                           => 'profiles#update'
       get '/'                                 => 'profiles#index'
+      post 'update'                           => 'profiles#update'
       get 'detail'                            => 'profiles#show'
-      delete 'delete'                         => 'profiles#destroy'
     end
 
     #Sells
