@@ -118,6 +118,9 @@ module V1
             @ora.user_login_type = "normal"
             @ora.is_active = true
             if @ora.save
+
+              # setelah selesai register, harus buat satu ID di table profile
+              Profile.create({user_id: @ora.id})
   
               TheMailer.register(@ora).deliver_now
   

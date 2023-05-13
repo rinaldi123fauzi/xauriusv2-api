@@ -13,6 +13,9 @@
 #  user_id      :bigint           not null
 #  status_kyc   :boolean          default(FALSE)
 #  country      :string
+#  file_npwp    :string
+#  file_ktp     :string
+#  image        :string
 #
 
 # TODO: Buat status KYC
