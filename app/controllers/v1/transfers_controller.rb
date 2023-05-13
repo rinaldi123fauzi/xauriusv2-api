@@ -32,9 +32,9 @@ module V1
       @transfers.status = params[:status]
       @transfers.user_id = params[:user_id]
       if @transfers.save
-        render json: {success: true, message:'Transfers is saved', data:@transfers}, status: :ok
+        render json: {success: true, msg:'Transfers is saved', data:@transfers}, status: :ok
       else
-        render json: {success: false, message:'Transfers is not saved', data:@transfers.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Transfers is not saved', data:@transfers.errors}, status: :unprocessable_entity
       end
     end
 
@@ -47,13 +47,13 @@ module V1
       @transfers.update(address: params[:address])
       @transfers.update(quantity: params[:quantity])
       @transfers.update(status: params[:status])
-      render json: {success: true, message:'Transfers is update', data:@transfers}, status: :ok
+      render json: {success: true, msg:'Transfers is update', data:@transfers}, status: :ok
     end
 
     def destroy
       transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
       transfers.destroy!
-      render json: {success: true, message:'Transfers has been deleted', data:transfers}, status: :ok
+      render json: {success: true, msg:'Transfers has been deleted', data:transfers}, status: :ok
     end
 
     private

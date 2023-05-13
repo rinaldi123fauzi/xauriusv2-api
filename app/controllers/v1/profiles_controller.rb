@@ -46,7 +46,7 @@ module V1
 
       @profile.save
 
-      render json: {success: true, message:'Profiles is update', data:@profiles}, status: :ok
+      render json: {success: true, msg:'Profiles is update', data:@profiles}, status: :ok
     end
 
   

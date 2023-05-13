@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_11_024621) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_13_045510) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -97,6 +97,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_11_024621) do
     t.bigint "user_id", null: false
     t.boolean "status_kyc", default: false
     t.string "country"
+    t.string "file_npwp"
+    t.string "file_ktp"
+    t.string "image"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
