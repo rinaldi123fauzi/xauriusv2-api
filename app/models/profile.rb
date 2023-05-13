@@ -11,7 +11,8 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
-#  status       :boolean          default(FALSE)
+#  status_kyc   :boolean          default(FALSE)
+#  country      :string
 #
 
 # TODO: Buat status KYC
