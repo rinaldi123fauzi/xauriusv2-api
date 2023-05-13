@@ -370,7 +370,7 @@ module V1
       end
       render json: {
         status: 'Success', 
-        message:'logout success', 
+        msg:'logout success', 
         }, status: :ok
     end
 
