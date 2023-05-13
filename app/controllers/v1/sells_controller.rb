@@ -35,9 +35,9 @@ module V1
         @sum = @checkBalances.balance_value - params[:sell]
         @checkBalances.update(balance_value: @sum)          
         @checkBalances.update(currency: params[:currency])
-        render json: {success: true, message:'Sells is saved', data:@sells}, status: :ok
+        render json: {success: true, msg:'Sells is saved', data:@sells}, status: :ok
       else
-        render json: {success: false, message:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
       end
     end
 
@@ -50,13 +50,13 @@ module V1
       @sells.update(quantity: params[:quantity])
       @sells.update(status: params[:status])
       @sells.update(user_id: params[:user_id])
-      render json: {success: true, message:'Sells is update', data:@sells}, status: :ok
+      render json: {success: true, msg:'Sells is update', data:@sells}, status: :ok
     end
 
     def destroy
       sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
       sells.destroy!
-      render json: {success: true, message:'Sells has been deleted', data:sells}, status: :ok
+      render json: {success: true, msg:'Sells has been deleted', data:sells}, status: :ok
     end
 
     private

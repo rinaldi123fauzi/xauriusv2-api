@@ -40,9 +40,9 @@ module V1
           @balance.balance_value = params[:total]          
           @balance.currency = params[:currency]          
         end
-        render json: {success: true, message:'Deposits is saved', data:@deposits}, status: :ok
+        render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else
-        render json: {success: false, message:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
       end
     end
 
@@ -59,13 +59,13 @@ module V1
       @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
       @checkBalances.update(balance_value: params[:total])          
       @checkBalances.update(currency: params[:currency])
-      render json: {success: true, message:'Deposit is update', data:deposits}, status: :ok
+      render json: {success: true, msg:'Deposit is update', data:deposits}, status: :ok
     end
 
     def destroy
       deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
       deposits.destroy!
-      render json: {success: true, message:'Deposit has been deleted', data:deposits}, status: :ok
+      render json: {success: true, msg:'Deposit has been deleted', data:deposits}, status: :ok
     end
 
     private

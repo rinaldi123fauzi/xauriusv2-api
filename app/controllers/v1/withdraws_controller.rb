@@ -36,9 +36,9 @@ module V1
         @sum = @checkBalances.balance_value - params[:withdraw]
         @checkBalances.update(balance_value: @sum)          
         @checkBalances.update(currency: params[:currency])
-        render json: {success: true, message:'Withdraws is saved', data:@withdraws}, status: :ok
+        render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
       else
-        render json: {success: false, message:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
       end
     end
 
@@ -52,13 +52,13 @@ module V1
       @withdraws.update(withdraw: params[:withdraw])
       @withdraws.update(status: params[:status])
       @withdraws.update(user_id: params[:user_id])
-      render json: {success: true, message:'Withdraw is update', data:@withdraws}, status: :ok
+      render json: {success: true, msg:'Withdraw is update', data:@withdraws}, status: :ok
     end
 
     def destroy
       withdraws = Withdraw.find_by_user_id(decoded_auth_token[:user_id])
       withdraws.destroy!
-      render json: {success: true, message:'Withdraw has been deleted', data:withdraws}, status: :ok
+      render json: {success: true, msg:'Withdraw has been deleted', data:withdraws}, status: :ok
     end
 
     private

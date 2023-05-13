@@ -31,9 +31,9 @@ module V1
       @users.is_email_verify = params[:is_email_verify]
       @users.is_usaha = params[:is_usaha]
       if @users.save
-        render json: {success: true, message:'User is saved', data:@users}, status: :ok
+        render json: {success: true, msg:'User is saved', data:@users}, status: :ok
       else
-        render json: {success: false, message:'User is not saved', data:@users.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'User is not saved', data:@users.errors}, status: :unprocessable_entity
       end
     end
 
@@ -46,13 +46,13 @@ module V1
       @users.update(is_active: params[:is_active])
       @users.update(is_email_verify: params[:is_email_verify])
       @users.update(is_usaha: params[:is_usaha])
-      render json: {success: true, message:'Users is update', data:@users}, status: :ok
+      render json: {success: true, msg:'Users is update', data:@users}, status: :ok
     end
 
     def destroy
       users = User.find_by_user_id(decoded_auth_token[:user_id])
       users.destroy!
-      render json: {success: true, message:'Users has been deleted', data:users}, status: :ok
+      render json: {success: true, msg:'Users has been deleted', data:users}, status: :ok
     end
 
     private

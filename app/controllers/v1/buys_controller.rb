@@ -31,9 +31,9 @@ module V1
       @buys.status = params[:status]
       @buys.user_id = params[:user_id]
       if @buys.save
-        render json: {success: true, message:'Buys is saved', data:@buys}, status: :ok
+        render json: {success: true, msg:'Buys is saved', data:@buys}, status: :ok
       else
-        render json: {success: false, message:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
       end
     end
 
@@ -46,13 +46,13 @@ module V1
       @buys.update(quantity: params[:quantity])
       @buys.update(status: params[:status])
       @buys.update(user_id: params[:user_id])
-      render json: {success: true, message:'Buys is update', data:@buys}, status: :ok
+      render json: {success: true, msg:'Buys is update', data:@buys}, status: :ok
     end
 
     def destroy
       buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
       buys.destroy!
-      render json: {success: true, message:'Buys has been deleted', data:buys}, status: :ok
+      render json: {success: true, msg:'Buys has been deleted', data:buys}, status: :ok
     end
 
     private

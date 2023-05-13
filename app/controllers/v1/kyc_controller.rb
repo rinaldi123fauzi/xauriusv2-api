@@ -19,7 +19,7 @@ module V1
         if params[:image].present?
           @profiles.update(image: params[:image])
         end
-        render json: {success: true, message:'KYC is update', data:@profiles}, status: :ok
+        render json: {success: true, msg:'KYC is update', data:@profiles}, status: :ok
       end
 
       private
