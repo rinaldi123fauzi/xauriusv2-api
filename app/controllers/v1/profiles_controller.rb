@@ -4,56 +4,71 @@ module V1
     before_action :authenticate_request
 
     def index
-      profiles = Profile.where(user_id: decoded_auth_token[:user_id])
+      @profile = Profile.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: profiles.as_json(include: :image)
+        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end
 
     def show
-      profiles = Profile.find_by_user_id(decoded_auth_token[:user_id])
+      @profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: profiles
+        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end
 
-    
     def update
 
-      @profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      @profile.full_name     = params[:full_name]
-      @profile.phone_number  = params[:phone_number]
-      @profile.address       = params[:address]
-      @profile.id_number     = params[:id_number]
-      @profile.npwp_number   = params[:npwp_number]
-      @profile.country       = params[:country]
+      @checkIdNumber = Profile.where(id_number: params[:id_number]).count
+      @checkNpwp = Profile.where(npwp_number: params[:npwp_number]).count
 
-      if params[:file_npwp] && params[:file_npwp] != ""
-        @profile.file_npwp = params[:file_npwp]
+      if @checkIdNumber == 0
+        if @checkNpwp == 0
+          @profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
+          @profile.full_name     = params[:full_name]
+          @profile.phone_number  = params[:phone_number]
+          @profile.address       = params[:address]
+          @profile.id_number     = params[:id_number]
+          @profile.npwp_number   = params[:npwp_number]
+          @profile.country       = params[:country]
+    
+          if params[:file_npwp] && params[:file_npwp] != ""
+            @profile.file_npwp = params[:file_npwp]
+          end
+    
+          if params[:file_ktp] && params[:file_ktp] != ""
+            @profile.file_ktp = params[:file_ktp]
+          end
+    
+          if params[:image] && params[:image] != ""
+            @profile.image = params[:image]
+          end
+    
+          @profile.save
+    
+          render json: {
+            success: true, 
+            msg: 'Profiles is update', 
+            data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
+          }, status: :ok
+        else
+          render json: {
+            success: false, 
+            msg: 'Nomor npwp harus unik'
+          }, status: :ok
+        end
+      else
+        render json: {
+          success: false, 
+          msg: 'Id Number harus unik'
+        }, status: :ok
       end
-
-      if params[:file_ktp] && params[:file_ktp] != ""
-        @profile.file_ktp = params[:file_ktp]
-      end
-
-      if params[:image] && params[:image] != ""
-        @profile.image = params[:image]
-      end
-
-      @profile.save
-
-      render json: {
-        success: true, 
-        msg: 'Profiles is update', 
-        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
-      }, status: :ok
     end
 
-  
     private
     def profile_params
       params.require(:profile).permit(:full_name,:phone_number,:address,:id_number,:npwp_number,:deposit,:user_id)
