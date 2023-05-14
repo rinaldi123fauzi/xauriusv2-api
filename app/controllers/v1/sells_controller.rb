@@ -22,6 +22,8 @@ module V1
     end
 
     def create
+      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+
       @sells = Sell.new
       @sells.sell = params[:sell]
       @sells.summary = params[:summary]
@@ -30,14 +32,21 @@ module V1
       @sells.quantity = params[:quantity]
       @sells.status = params[:status]
       @sells.user_id = params[:user_id]
-      if @sells.save
-        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-        @sum = @checkBalances.balance_value - params[:sell]
-        @checkBalances.update(balance_value: @sum)          
-        @checkBalances.update(currency: params[:currency])
-        render json: {success: true, msg:'Sells is saved', data:@sells}, status: :ok
+
+      if @checkBalances.balance_value >= params[:sell]
+        if @sells.save
+          @sum = @checkBalances.balance_value - params[:sell]
+          @checkBalances.update(balance_value: @sum)          
+          @checkBalances.update(currency: params[:currency])
+          render json: {success: true, msg:'Sells is saved', data:@sells}, status: :ok
+        else
+          render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+        end
       else
-        render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+        render json: {
+          success: false, 
+          msg:'Balance tidak mencukupi', 
+          }, status: :ok
       end
     end
 

@@ -22,6 +22,8 @@ module V1
     end
 
     def create
+      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+
       @withdraws = Withdraw.new
       @withdraws.name_bank = params[:name_bank]
       @withdraws.account_number = params[:account_number]
@@ -31,14 +33,21 @@ module V1
       @withdraws.withdraw = params[:withdraw]
       @withdraws.status = params[:status]
       @withdraws.user_id = params[:user_id]
-      if @withdraws.save
-        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-        @sum = @checkBalances.balance_value - params[:withdraw]
-        @checkBalances.update(balance_value: @sum)          
-        @checkBalances.update(currency: params[:currency])
-        render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
+
+      if @checkBalances.balance_value >= params[:withdraw]
+        if @withdraws.save
+          @sum = @checkBalances.balance_value - params[:withdraw]
+          @checkBalances.update(balance_value: @sum)          
+          @checkBalances.update(currency: params[:currency])
+          render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
+        else
+          render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
+        end
       else
-        render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
+        render json: {
+          success: false, 
+          msg:'Balances tidak mencukupi'
+          }, status: :ok
       end
     end
 
