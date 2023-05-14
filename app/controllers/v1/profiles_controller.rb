@@ -46,7 +46,11 @@ module V1
 
       @profile.save
 
-      render json: {success: true, msg:'Profiles is update', data:@profiles}, status: :ok
+      render json: {
+        success: true, 
+        msg: 'Profiles is update', 
+        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
+      }, status: :ok
     end
 
   
