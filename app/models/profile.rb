@@ -18,10 +18,12 @@
 #  image        :string
 #
 
-# TODO: Buat status KYC
 class Profile < ApplicationRecord
     belongs_to :user
     has_one_attached :file_npwp
     has_one_attached :file_ktp
     has_one_attached :image
+
+    validates :id_number, uniqueness: true
+    validates :npwp_number, uniqueness: true
 end
