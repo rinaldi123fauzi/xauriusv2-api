@@ -30,7 +30,7 @@ module V1
       @transfers.address = params[:address]
       @transfers.quantity = params[:quantity]
       @transfers.status = params[:status]
-      @transfers.user_id = params[:user_id]
+      @transfers.user_id = decoded_auth_token[:user_id]
       if @transfers.save
         render json: {success: true, msg:'Transfers is saved', data:@transfers}, status: :ok
       else
@@ -40,14 +40,19 @@ module V1
 
     def update
       @transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
-      @transfers.update(network: params[:network])
-      @transfers.update(address_wallet: params[:address_wallet])
-      @transfers.update(date: params[:date])
-      @transfers.update(tx_hash: params[:tx_hash])
-      @transfers.update(address: params[:address])
-      @transfers.update(quantity: params[:quantity])
-      @transfers.update(status: params[:status])
-      render json: {success: true, msg:'Transfers is update', data:@transfers}, status: :ok
+      @transfers.network = params[:network]
+      @transfers.address_wallet = params[:address_wallet]
+      @transfers.date = params[:date]
+      @transfers.tx_hash = params[:tx_hash]
+      @transfers.address = params[:address]
+      @transfers.quantity = params[:quantity]
+      @transfers.status = params[:status]
+      
+      if @transfers.save
+        render json: {success: true, msg:'Transfers is update', data:@transfers}, status: :ok
+      else
+        render json: {success: false, msg:'Transfers is not update', data:@transfers.errors}, status: :ok
+      end
     end
 
     def destroy

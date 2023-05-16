@@ -23,11 +23,6 @@ Rails.application.routes.draw do
       post 'signout'                          => 'auth#destroy'
     end
 
-    #KYC
-    scope :kyc do
-      post 'update'                           => 'kyc#edit_kyc'
-    end
-
     #Balances
     scope :balances do
       get '/'                                 => 'balances#index'

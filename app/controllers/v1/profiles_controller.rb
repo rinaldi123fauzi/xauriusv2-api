@@ -71,7 +71,7 @@ module V1
       else 
         render json: {
           status: false,
-          msg: 'KYC gidak bole di edit'
+          msg: 'KYC tidak boleh di edit'
         }
       end
     end

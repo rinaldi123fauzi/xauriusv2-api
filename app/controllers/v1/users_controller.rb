@@ -38,15 +38,20 @@ module V1
     end
 
     def update
-      @users = User.find_by_user_id(decoded_auth_token[:user_id])
-      @users.update(username: params[:username])
-      @users.update(password: params[:password])
-      @users.update(name: params[:name])
-      @users.update(email: params[:email])
-      @users.update(is_active: params[:is_active])
-      @users.update(is_email_verify: params[:is_email_verify])
-      @users.update(is_usaha: params[:is_usaha])
-      render json: {success: true, msg:'Users is update', data:@users}, status: :ok
+      @users = User.find(decoded_auth_token[:user_id])
+      @users.username = params[:username]
+      @users.password = params[:password]
+      @users.name = params[:name]
+      @users.email = params[:email]
+      @users.is_active = params[:is_active]
+      @users.is_email_verify = params[:is_email_verify]
+      @users.is_usaha = params[:is_usaha]
+      
+      if @users.save
+        render json: {success: true, msg:'Users is update', data:@users}, status: :ok
+      else
+        render json: {success: false, msg:'Users is not update', data:@users.errors}, status: :ok
+      end
     end
 
     def destroy
