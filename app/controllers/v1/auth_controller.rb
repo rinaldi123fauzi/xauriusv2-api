@@ -190,9 +190,6 @@ module V1
             if @orang.email_vercode == @vercode
               @orang.is_email_verify  = true
               if @orang.save
-                @profiles = Profile.new
-                @profiles.user_id = @orangs.first.id
-                @profiles.save
                 
                 render json: {
                   success: true,

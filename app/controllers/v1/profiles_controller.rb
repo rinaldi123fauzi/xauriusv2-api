@@ -4,24 +4,23 @@ module V1
     before_action :authenticate_request
 
     def index
-      profiles = Profile.where(user_id: decoded_auth_token[:user_id])
+      @profile = Profile.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: profiles.as_json(include: :image)
+        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end
 
     def show
-      profiles = Profile.find_by_user_id(decoded_auth_token[:user_id])
+      @profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: profiles
+        data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end
 
-    
     def update
 
       user_id = decoded_auth_token[:user_id]
@@ -77,7 +76,6 @@ module V1
       end
     end
 
-  
     private
     def profile_params
       params.require(:profile).permit(:full_name,:phone_number,:address,:id_number,:npwp_number,:deposit,:user_id)

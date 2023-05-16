@@ -33,7 +33,8 @@ module V1
       if @deposits.save
         @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
         if @checkBalances
-          @checkBalances.update(balance_value: params[:total])          
+          @sum = params[:total] + @checkBalances.balance_value
+          @checkBalances.update(balance_value: @sum)          
           @checkBalances.update(currency: params[:currency])
         else
           @balance = Balance.new
