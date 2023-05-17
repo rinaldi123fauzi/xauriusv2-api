@@ -29,12 +29,12 @@ module V1
 
       if @profile.status_kyc == false 
 
-        @profile.full_name     = params[:full_name]
-        @profile.phone_number  = params[:phone_number] 
-        @profile.address       = params[:address]
-        @profile.id_number     = params[:id_number]
-        @profile.npwp_number   = params[:npwp_number]
-        @profile.country       = params[:country]
+        @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
+        @profile.phone_number  = params[:phone_number] if params[:phone_number] && params params[:phone_number] != ""
+        @profile.address       = params[:address] if params[:address] && params params[:address] != ""
+        @profile.id_number     = params[:id_number] if params[:id_number] && params params[:id_number] != ""
+        @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params params[:npwp_number] != ""
+        @profile.country       = params[:country] if params[:country] && params params[:country] != ""
 
         if params[:file_npwp] && params[:file_npwp] != ""
           @profile.file_npwp = params[:file_npwp]
