@@ -28,6 +28,12 @@ Rails.application.routes.draw do
       get '/'                                 => 'balances#index'
     end
 
+    #Verify
+    scope :admin do
+      post 'verify_balance'                   => 'admin#verify_balance'
+      post 'verify_kyc'                       => 'admin#verify_kyc'
+    end
+
     #Buys
     scope :buys do
       get '/'                                 => 'buys#index'

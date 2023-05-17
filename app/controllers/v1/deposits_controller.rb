@@ -30,17 +30,8 @@ module V1
       @deposits.date = params[:date]
       @deposits.order = params[:order]
       @deposits.user_id = decoded_auth_token[:user_id]
+      @deposits.status = "Menunggu validasi admin"
       if @deposits.save
-        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-        if @checkBalances
-          @sum = params[:total] + @checkBalances.balance_value
-          @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: params[:currency])
-        else
-          @balance = Balance.new
-          @balance.balance_value = params[:total]          
-          @balance.currency = params[:currency]          
-        end
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else
         render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
