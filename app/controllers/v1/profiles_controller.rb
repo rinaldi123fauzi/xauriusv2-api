@@ -56,7 +56,7 @@ module V1
             data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
           }, status: :ok
         else 
-          if @profile.errors?
+          if @profile.errors
             render json: {
               status: false,
               msg: @profile.errors.to_json

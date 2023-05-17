@@ -4,7 +4,7 @@ module V1
     before_action :authenticate_request
 
     def index
-      users = User.where(user_id: decoded_auth_token[:user_id])
+      users = User.where(id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
@@ -21,44 +21,28 @@ module V1
       }
     end
 
-    def create
-      @users = User.new
-      @users.username = params[:username]
-      @users.password = params[:password]
-      @users.name = params[:name]
-      @users.email = params[:email]
-      @users.is_active = params[:is_active]
-      @users.is_email_verify = params[:is_email_verify]
-      @users.is_usaha = params[:is_usaha]
-      if @users.save
-        render json: {success: true, msg:'User is saved', data:@users}, status: :ok
-      else
-        render json: {success: false, msg:'User is not saved', data:@users.errors}, status: :unprocessable_entity
-      end
-    end
-
-    def update
-      @users = User.find(decoded_auth_token[:user_id])
-      @users.username = params[:username]
-      @users.password = params[:password]
-      @users.name = params[:name]
-      @users.email = params[:email]
-      @users.is_active = params[:is_active]
-      @users.is_email_verify = params[:is_email_verify]
-      @users.is_usaha = params[:is_usaha]
+    # def update
+    #   @users = User.find(decoded_auth_token[:user_id])
+    #   @users.username = params[:username]
+    #   @users.password = params[:password]
+    #   @users.name = params[:name]
+    #   @users.email = params[:email]
+    #   @users.is_active = params[:is_active]
+    #   @users.is_email_verify = params[:is_email_verify]
+    #   @users.is_usaha = params[:is_usaha]
       
-      if @users.save
-        render json: {success: true, msg:'Users is update', data:@users}, status: :ok
-      else
-        render json: {success: false, msg:'Users is not update', data:@users.errors}, status: :ok
-      end
-    end
+    #   if @users.save
+    #     render json: {success: true, msg:'Users is update', data:@users}, status: :ok
+    #   else
+    #     render json: {success: false, msg:'Users is not update', data:@users.errors}, status: :ok
+    #   end
+    # end
 
-    def destroy
-      users = User.find_by_user_id(decoded_auth_token[:user_id])
-      users.destroy!
-      render json: {success: true, msg:'Users has been deleted', data:users}, status: :ok
-    end
+    # def destroy
+    #   users = User.find(decoded_auth_token[:user_id])
+    #   users.destroy!
+    #   render json: {success: true, msg:'Users has been deleted', data:users}, status: :ok
+    # end
 
     private
     def profile_params
