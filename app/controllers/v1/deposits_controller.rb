@@ -30,7 +30,7 @@ module V1
       @deposits.date = params[:date]
       @deposits.order = params[:order]
       @deposits.user_id = decoded_auth_token[:user_id]
-      @deposits.status = "Menunggu validasi admin"
+      @deposits.status = "Menunggu verifikasi admin"
       if @deposits.save
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else

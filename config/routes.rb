@@ -10,6 +10,16 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'authentication#authenticate'
 
   namespace :v1 do
+
+    # Admin
+    namespace :admin do
+      #Verify
+      scope :verify do
+        post 'deposit'                        => 'verify#deposit'
+        post 'kyc'                            => 'verify#kyc'
+      end
+    end
+
     #Auth
     scope :auth do
       post 'login'                            => 'auth#login'
@@ -26,12 +36,6 @@ Rails.application.routes.draw do
     #Balances
     scope :balances do
       get '/'                                 => 'balances#index'
-    end
-
-    #Verify
-    scope :admin do
-      post 'verify_balance'                   => 'admin#verify_balance'
-      post 'verify_kyc'                       => 'admin#verify_kyc'
     end
 
     #Buys
