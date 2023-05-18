@@ -24,42 +24,14 @@ module V1
     def create
       @deposits = Deposit.new
       @deposits.name_bank = params[:name_bank]
-      @deposits.unit_price = params[:unit_price]
-      @deposits.quantity = params[:quantity]
-      @deposits.total = params[:total]
-      @deposits.date = params[:date]
-      @deposits.order = params[:order]
-      @deposits.user_id = decoded_auth_token[:user_id]
-      @deposits.status = "Menunggu verifikasi admin"
+      @deposits.total     = params[:total]
+      @deposits.user_id   = decoded_auth_token[:user_id]
+      @deposits.status    = "menunggu-pembayaran"
       if @deposits.save
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else
         render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
       end
-    end
-
-    def update
-      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
-      deposits.name_bank = params[:name_bank]
-      deposits.unit_price = params[:unit_price]
-      deposits.quantity = params[:quantity]
-      deposits.total = params[:total]
-      deposits.date = params[:date]
-      deposits.order = params[:order]
-      if deposits.save
-        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-        @checkBalances.update(balance_value: params[:total])          
-        @checkBalances.update(currency: params[:currency])
-        render json: {success: true, msg:'Deposit is update', data:deposits}, status: :ok
-      else
-        render json: {success: false, msg:'Deposit is not update', data:deposits.errors}, status: :ok
-      end
-    end
-
-    def destroy
-      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
-      deposits.destroy!
-      render json: {success: true, msg:'Deposit has been deleted', data:deposits}, status: :ok
     end
 
     private

@@ -2,37 +2,52 @@ module V1
   module Admin
     class VerifyController < ApplicationController
       include ActionController::Cookies
-      before_action :authenticate_request
 
-      def deposit
-        if decoded_auth_token[:role] == "admin"
-          user_id = params[:user_id]
-          @deposits = Deposit.where(user_id: user_id, status: "Menunggu verifikasi admin").first
-          if @deposits.present?
-            @deposits.status = "Terverifikasi"
-            if @deposits.save
-              @checkBalances = Balance.find_by_user_id(user_id)
-              if @checkBalances
-                @sum = @deposits.total + @checkBalances.balance_value
-                @checkBalances.balance_value = @sum          
-                @checkBalances.currency = "IDR"
-                @checkBalances.save
-              else
-                @balance = Balance.new
-                @balance.balance_value = @deposits.total          
-                @balance.currency = "IDR"  
-                @balance.user_id = user_id 
-                @balance.save       
-              end 
-              render json: {success: true, msg:'Deposits is verified', data:@deposits}, status: :ok
-            else
-              render json: {success: false, msg:'Deposits is not verified', data:@deposits.error}, status: :ok
-            end
-          else
-            render json: {success: false, msg:'User tidak ditemukan / Deposit sudah terverifikasi'}, status: :ok
+      # KHUSUS UNTUK DEVELOPMENT SAJA 
+      def approve_deposit 
+        deposit_id = params[:deposit_id]
+
+        # cari deposit ID yang sedang menunggu-pembayaran
+        deposits = Deposit.where(id: deposit_id, status: 'menunggu-pembayaran')
+
+        if deposits.count == 1 
+          # kode lanjut 
+          deposit = deposits.first 
+
+          balances = Balance.where(user_id: deposit.user_id, currency: 'IDR')
+
+          if balances.count == 0
+            Balance.create({
+              user_id: deposit.user_id,
+              currency: 'IDR',
+              balance_value: 0
+            })
           end
-        else
-          render json: {success: false, msg:'Not Authorized'}, status: :ok
+
+          balance_obj = Balance.where(user_id: deposit.user_id, currency: 'IDR').first 
+
+          # balance awal 
+          balance_awal = balance_obj.balance_value
+
+          balance_after = balance_awal + deposit.total
+
+          balance_obj.balance_value = balance_after
+          balance_obj.save 
+
+          deposit.status = 'terbayar'
+          deposit.save 
+
+          render json: {
+            success: true, 
+            msg: 'Deposits is verified', 
+            data: {
+              balance: balance_obj,
+              deposit: deposit
+            }
+          }, status: :ok
+
+        else  
+          render json: {success: false, msg: 'Mungkin status sudah terbayar'}, status: :ok
         end
       end
 
