@@ -51,9 +51,7 @@ Rails.application.routes.draw do
     scope :deposits do
       get '/'                                 => 'deposits#index'
       post 'create'                           => 'deposits#create'
-      post 'update'                           => 'deposits#update'
       get 'detail'                            => 'deposits#show'
-      delete 'delete'                         => 'deposits#destroy'
     end
 
     #Profiles
