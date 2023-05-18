@@ -22,20 +22,25 @@ module V1
     end
 
     def create
+      # Harga per satu XAU
       harga_satu_xau = 1000000
 
+      # Cari User ID yang exists
       balance = Balance.where(user_id: decoded_auth_token[:user_id])
       if balance.count == 1
+
+        # Cari nilai balance
         balance = Balance.find_by_user_id(decoded_auth_token[:user_id])
         if balance.balance_value > params[:price].to_f
           
-          # hitung per harga satu xau
+          # hitung per harga satu XAU
           hitungXau = params[:price].to_f / harga_satu_xau
           
           # Update Balance
           balance.balance_value = balance.balance_value - params[:price].to_f
           balance.save
 
+          # Tambah buy
           @buys = Buy.new
           @buys.summary = hitungXau.to_f
           @buys.price = params[:price]

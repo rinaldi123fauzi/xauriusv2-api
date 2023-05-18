@@ -11,4 +11,6 @@
 #
 class Balance < ApplicationRecord
   belongs_to :user
+
+  validates :currency, inclusion: { in: %w(XAU IDR), allow_nil: true, message: "%{value} bukan currency yang benar" }
 end
