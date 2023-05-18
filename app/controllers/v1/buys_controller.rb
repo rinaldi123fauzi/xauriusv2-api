@@ -22,41 +22,66 @@ module V1
     end
 
     def create
-      @buys = Buy.new
-      @buys.spend = params[:spend]
-      @buys.summary = params[:summary]
-      @buys.date = params[:date]
-      @buys.price = params[:price]
-      @buys.quantity = params[:quantity]
-      @buys.status = params[:status]
-      @buys.user_id = decoded_auth_token[:user_id]
-      if @buys.save
-        render json: {success: true, msg:'Buys is saved', data:@buys}, status: :ok
+      harga_satu_xau = 1000000
+
+      balance = Balance.where(user_id: decoded_auth_token[:user_id])
+      if balance.count == 1
+        balance = Balance.find_by_user_id(decoded_auth_token[:user_id])
+        if balance.balance_value > params[:price].to_f
+          
+          # hitung per harga satu xau
+          hitungXau = params[:price].to_f / harga_satu_xau
+          
+          # Update Balance
+          balance.balance_value = balance.balance_value - params[:price].to_f
+          balance.save
+
+          @buys = Buy.new
+          @buys.summary = hitungXau.to_f
+          @buys.price = params[:price]
+          @buys.status = "berhasil"
+          @buys.user_id = decoded_auth_token[:user_id]
+          
+          if @buys.save
+            render json: {
+              success: true, 
+              msg:'Buys is saved', 
+              data:{
+                buys: @buys,
+                balance: balance
+              }
+            }, status: :ok
+          else
+            render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
+          end
+        else
+          render json: {success: false, msg:'Balance anda tidak mencukupi', data:@buys}, status: :ok
+        end
       else
-        render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'User tidak ditemukan'}, status: :ok
       end
     end
 
-    def update
-      @buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
-      @buys.spend = params[:spend]
-      @buys.summary = params[:summary]
-      @buys.date = params[:date]
-      @buys.price = params[:price]
-      @buys.quantity = params[:quantity]
-      @buys.status = params[:status]
-      if @buys.save
-        render json = {success: true, msg:'Buys is update', data:@buys}, status: :ok
-      else
-        render json = {success: false, msg:'Buys is not update', data:@buys.errors}, status: :ok
-      end
-    end
+    # def update
+    #   @buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
+    #   @buys.spend = params[:spend]
+    #   @buys.summary = params[:summary]
+    #   @buys.date = params[:date]
+    #   @buys.price = params[:price]
+    #   @buys.quantity = params[:quantity]
+    #   @buys.status = params[:status]
+    #   if @buys.save
+    #     render json = {success: true, msg:'Buys is update', data:@buys}, status: :ok
+    #   else
+    #     render json = {success: false, msg:'Buys is not update', data:@buys.errors}, status: :ok
+    #   end
+    # end
 
-    def destroy
-      buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
-      buys.destroy!
-      render json: {success: true, msg:'Buys has been deleted', data:buys}, status: :ok
-    end
+    # def destroy
+    #   buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
+    #   buys.destroy!
+    #   render json: {success: true, msg:'Buys has been deleted', data:buys}, status: :ok
+    # end
 
     private
     def buy_params
