@@ -15,4 +15,6 @@
 # buat column status yang nanti isinya create, waiting-fo-payment, expire, complete
 class Deposit < ApplicationRecord
     belongs_to :user
+
+    validates :status, inclusion: { in: %w(menunggu-pembayaran kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

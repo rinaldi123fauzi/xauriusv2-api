@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     namespace :admin do
       #Verify
       scope :verify do
-        post 'deposit'                        => 'verify#deposit'
+        post 'approve-deposit'                => 'verify#approve_deposit'
         post 'kyc'                            => 'verify#kyc'
       end
     end

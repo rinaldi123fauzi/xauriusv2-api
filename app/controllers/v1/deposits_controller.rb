@@ -26,7 +26,7 @@ module V1
       @deposits.name_bank = params[:name_bank]
       @deposits.total     = params[:total]
       @deposits.user_id   = decoded_auth_token[:user_id]
-      @deposits.status    = "menunggu pembayaran"
+      @deposits.status    = "menunggu-pembayaran"
       if @deposits.save
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else
