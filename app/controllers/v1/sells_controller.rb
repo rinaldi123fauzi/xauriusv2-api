@@ -31,7 +31,7 @@ module V1
       @sells.price = params[:price]
       @sells.quantity = params[:quantity]
       @sells.status = params[:status]
-      @sells.user_id = params[:user_id]
+      @sells.user_id = decoded_auth_token[:user_id]
 
       if @checkBalances.balance_value >= params[:sell]
         if @sells.save
@@ -52,14 +52,19 @@ module V1
 
     def update
       @sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
-      @sells.update(sell: params[:sell])
-      @sells.update(summary: params[:summary])
-      @sells.update(date: params[:date])
-      @sells.update(price: params[:price])
-      @sells.update(quantity: params[:quantity])
-      @sells.update(status: params[:status])
-      @sells.update(user_id: params[:user_id])
-      render json: {success: true, msg:'Sells is update', data:@sells}, status: :ok
+      @sells.sell = params[:sell]
+      @sells.summary = params[:summary]
+      @sells.date = params[:date]
+      @sells.price = params[:price]
+      @sells.quantity = params[:quantity]
+      @sells.status = params[:status]
+      @sells.user_id = params[:user_id]
+      
+      if @sells.save
+        render json: {success: true, msg:'Sells is update', data:@sells}, status: :ok
+      else
+        render json: {success: false, msg:'Sells is not update', data:@sells.errors}, status: :ok
+      end
     end
 
     def destroy

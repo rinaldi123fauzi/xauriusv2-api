@@ -29,18 +29,9 @@ module V1
       @deposits.total = params[:total]
       @deposits.date = params[:date]
       @deposits.order = params[:order]
-      @deposits.user_id = params[:user_id]
+      @deposits.user_id = decoded_auth_token[:user_id]
+      @deposits.status = "Menunggu verifikasi admin"
       if @deposits.save
-        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-        if @checkBalances
-          @sum = params[:total] + @checkBalances.balance_value
-          @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: params[:currency])
-        else
-          @balance = Balance.new
-          @balance.balance_value = params[:total]          
-          @balance.currency = params[:currency]          
-        end
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
       else
         render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
@@ -49,18 +40,20 @@ module V1
 
     def update
       deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
-      deposits.update(name_bank: params[:name_bank])
-      deposits.update(unit_price: params[:unit_price])
-      deposits.update(quantity: params[:quantity])
-      deposits.update(total: params[:total])
-      deposits.update(date: params[:date])
-      deposits.update(order: params[:order])
-      deposits.update(user_id: params[:user_id])
-
-      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
-      @checkBalances.update(balance_value: params[:total])          
-      @checkBalances.update(currency: params[:currency])
-      render json: {success: true, msg:'Deposit is update', data:deposits}, status: :ok
+      deposits.name_bank = params[:name_bank]
+      deposits.unit_price = params[:unit_price]
+      deposits.quantity = params[:quantity]
+      deposits.total = params[:total]
+      deposits.date = params[:date]
+      deposits.order = params[:order]
+      if deposits.save
+        @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+        @checkBalances.update(balance_value: params[:total])          
+        @checkBalances.update(currency: params[:currency])
+        render json: {success: true, msg:'Deposit is update', data:deposits}, status: :ok
+      else
+        render json: {success: false, msg:'Deposit is not update', data:deposits.errors}, status: :ok
+      end
     end
 
     def destroy

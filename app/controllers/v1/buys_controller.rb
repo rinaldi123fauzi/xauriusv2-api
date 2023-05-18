@@ -29,7 +29,7 @@ module V1
       @buys.price = params[:price]
       @buys.quantity = params[:quantity]
       @buys.status = params[:status]
-      @buys.user_id = params[:user_id]
+      @buys.user_id = decoded_auth_token[:user_id]
       if @buys.save
         render json: {success: true, msg:'Buys is saved', data:@buys}, status: :ok
       else
@@ -39,14 +39,17 @@ module V1
 
     def update
       @buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
-      @buys.update(spend: params[:spend])
-      @buys.update(summary: params[:summary])
-      @buys.update(date: params[:date])
-      @buys.update(price: params[:price])
-      @buys.update(quantity: params[:quantity])
-      @buys.update(status: params[:status])
-      @buys.update(user_id: params[:user_id])
-      render json: {success: true, msg:'Buys is update', data:@buys}, status: :ok
+      @buys.spend = params[:spend]
+      @buys.summary = params[:summary]
+      @buys.date = params[:date]
+      @buys.price = params[:price]
+      @buys.quantity = params[:quantity]
+      @buys.status = params[:status]
+      if @buys.save
+        render json = {success: true, msg:'Buys is update', data:@buys}, status: :ok
+      else
+        render json = {success: false, msg:'Buys is not update', data:@buys.errors}, status: :ok
+      end
     end
 
     def destroy

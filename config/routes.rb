@@ -10,6 +10,16 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'authentication#authenticate'
 
   namespace :v1 do
+
+    # Admin
+    namespace :admin do
+      #Verify
+      scope :verify do
+        post 'deposit'                        => 'verify#deposit'
+        post 'kyc'                            => 'verify#kyc'
+      end
+    end
+
     #Auth
     scope :auth do
       post 'login'                            => 'auth#login'
@@ -21,11 +31,6 @@ Rails.application.routes.draw do
 
       post 'change-password'                  => 'auth#change_password'
       post 'signout'                          => 'auth#destroy'
-    end
-
-    #KYC
-    scope :kyc do
-      post 'update'                           => 'kyc#edit_kyc'
     end
 
     #Balances

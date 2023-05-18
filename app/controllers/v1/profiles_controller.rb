@@ -29,12 +29,12 @@ module V1
 
       if @profile.status_kyc == false 
 
-        @profile.full_name     = params[:full_name]
-        @profile.phone_number  = params[:phone_number] 
-        @profile.address       = params[:address]
-        @profile.id_number     = params[:id_number]
-        @profile.npwp_number   = params[:npwp_number]
-        @profile.country       = params[:country]
+        @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
+        @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
+        @profile.address       = params[:address] if params[:address] && params[:address] != ""
+        @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
+        @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
+        @profile.country       = params[:country] if params[:country] && params[:country] != ""
 
         if params[:file_npwp] && params[:file_npwp] != ""
           @profile.file_npwp = params[:file_npwp]
@@ -56,7 +56,7 @@ module V1
             data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
           }, status: :ok
         else 
-          if @profile.errors?
+          if @profile.errors
             render json: {
               status: false,
               msg: @profile.errors.to_json
@@ -71,7 +71,7 @@ module V1
       else 
         render json: {
           status: false,
-          msg: 'KYC gidak bole di edit'
+          msg: 'KYC tidak boleh di edit'
         }
       end
     end

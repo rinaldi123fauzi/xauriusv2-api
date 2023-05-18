@@ -387,7 +387,7 @@ module V1
       #MODIFIKASI
       @rand = rand(1111..9999)
 
-      payload = {:email => user_obj.email, :user_id => user_obj.id, :session_id => @rand}
+      payload = {:email => user_obj.email, :user_id => user_obj.id, :session_id => @rand, :role => user_obj.role}
       token = JsonWebToken.encode(payload)
       user_obj.update_column(:jwt_token, token)
       user_obj.update_column(:session_id, @rand)
