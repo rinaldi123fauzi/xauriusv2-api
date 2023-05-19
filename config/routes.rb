@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       #Verify
       scope :verify do
         post 'approve-deposit'                => 'verify#approve_deposit'
-        post 'kyc'                            => 'verify#kyc'
+        post 'approve-kyc'                    => 'verify#approve_kyc'
       end
     end
 

@@ -51,27 +51,24 @@ module V1
         end
       end
 
-      def kyc
-        if decoded_auth_token[:role] == "admin"
-          user_id = params[:user_id]
-          @profiles = Profile.find_by_user_id(user_id)
-          if @profiles.present?
-            if @profiles.status_kyc == false
-              @profiles.status_kyc = true
-              if @profiles.save
-                render json: {success: true, msg:'KYC Terverifikasi', data: @profiles}, status: :ok
-              else
-                render json: {success: false, msg:'KYC gagal verifikasi', data: @profiles.error}, status: :ok
-              end
+      def approve_kyc
+        user_id = params[:user_id]
+        profiles = Profile.where(user_id: user_id)
+        if profiles.count == 1
+          profile = profiles.first
+          if profile.status_kyc == false
+            profile.status_kyc = true
+            if profile.save
+              render json: {success: true, msg:'KYC Terverifikasi', data: ActiveModelSerializers::SerializableResource.new(profile, each_serializer: ProfileSerializer)}, status: :ok
             else
-              render json: {success: false, msg:'KYC Sudah Terverifikasi'}, status: :ok
+              render json: {success: false, msg:'KYC gagal verifikasi', data: profile.error}, status: :ok
             end
           else
-            render json: {success: false, msg:'User tidak ditemukan'}, status: :ok
+            render json: {success: false, msg:'KYC Sudah Terverifikasi'}, status: :ok
           end
         else
-          render json: {success: false, msg:'Not Authorized'}, status: :ok
-        end 
+          render json: {success: false, msg:'Profile tidak ditemukan'}, status: :ok
+        end
       end
 
       private
