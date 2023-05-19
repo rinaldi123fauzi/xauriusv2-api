@@ -42,9 +42,7 @@ Rails.application.routes.draw do
     scope :buys do
       get '/'                                 => 'buys#index'
       post 'create'                           => 'buys#create'
-      post 'update'                           => 'buys#update'
       get 'detail'                            => 'buys#show'
-      delete 'delete'                         => 'buys#destroy'
     end
 
     #Deposit
@@ -63,29 +61,23 @@ Rails.application.routes.draw do
 
     #Sells
     scope :sells do
-      # post 'create'                           => 'sells#create'
-      post 'update'                           => 'sells#update'
+      post 'create'                           => 'sells#create'
       get '/'                                 => 'sells#index'
       get 'detail'                            => 'sells#show'
-      # delete 'delete'                         => 'sells#destroy'
     end
 
     #Transfers
     scope :transfers do
       post 'create'                           => 'transfers#create'
-      post 'update'                           => 'transfers#update'
       get '/'                                 => 'transfers#index'
       get 'detail'                            => 'transfers#show'
-      delete 'delete'                         => 'transfers#destroy'
     end
 
     #Withdraws
     scope :withdraws do
       post 'save'                             => 'withdraws#create'
-      post 'update'                           => 'withdraws#update'
       get '/'                                 => 'withdraws#index'
       get 'detail'                            => 'withdraws#show'
-      delete 'delete'                         => 'withdraws#destroy'
     end
 
     #Users
