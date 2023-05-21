@@ -29,14 +29,14 @@ module V1
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]
-      @withdraws.status = params[:status]
+      @withdraws.status = "menunggu-pembayaran"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @checkBalances.balance_value >= params[:withdraw]
+      if @checkBalances.balance_value >= params[:ammount].to_f
         if @withdraws.save
-          @sum = @checkBalances.balance_value - params[:withdraw]
+          @sum = @checkBalances.balance_value - params[:ammount].to_f
           @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: params[:currency])
+          @checkBalances.update(currency: 'IDR')
           render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
         else
           render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
