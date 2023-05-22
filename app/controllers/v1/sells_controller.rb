@@ -22,55 +22,56 @@ module V1
     end
 
     def create
-      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+      # Harga per satu XAU
+      harga_satu_xau = 1000000
 
-      @sells = Sell.new
-      @sells.sell = params[:sell]
-      @sells.summary = params[:summary]
-      @sells.date = params[:date]
-      @sells.price = params[:price]
-      @sells.quantity = params[:quantity]
-      @sells.status = params[:status]
-      @sells.user_id = decoded_auth_token[:user_id]
+      balances = Balance.where(user_id: decoded_auth_token[:user_id])
 
-      if @checkBalances.balance_value >= params[:sell]
-        if @sells.save
-          @sum = @checkBalances.balance_value - params[:sell]
-          @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: params[:currency])
-          render json: {success: true, msg:'Sells is saved', data:@sells}, status: :ok
+      if balances.count == 1
+
+        balance = balances.first
+
+        # cek balance
+        if balance.balance_xau.to_f >= params[:summary].to_f
+
+          # hitung balance_xau
+          sum = params[:summary].to_f * harga_satu_xau.to_f
+
+          # update balance_value
+          balance.balance_value = balance.balance_value + sum
+          balance.balance_xau = balance.balance_xau - params[:summary].to_f
+          balance.save
+
+          # Tambah sell
+          @sells = Sell.new
+          @sells.summary = params[:summary]
+          @sells.price = sum
+          @sells.user_id = decoded_auth_token[:user_id]
+    
+          if @sells.save
+            render json: {
+              success: true, 
+              msg:'Sells is saved', 
+              data:{
+                sells: @sells,
+                balances: balance
+              }
+              }, status: :ok
+          else
+            render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+          end
         else
-          render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+          render json: {
+            success: false, 
+            msg:'Balance XAU tidak mencukupi', 
+            }, status: :ok
         end
       else
         render json: {
           success: false, 
-          msg:'Balance tidak mencukupi', 
+          msg:'User tidak ditemukan', 
           }, status: :ok
       end
-    end
-
-    def update
-      @sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
-      @sells.sell = params[:sell]
-      @sells.summary = params[:summary]
-      @sells.date = params[:date]
-      @sells.price = params[:price]
-      @sells.quantity = params[:quantity]
-      @sells.status = params[:status]
-      @sells.user_id = params[:user_id]
-      
-      if @sells.save
-        render json: {success: true, msg:'Sells is update', data:@sells}, status: :ok
-      else
-        render json: {success: false, msg:'Sells is not update', data:@sells.errors}, status: :ok
-      end
-    end
-
-    def destroy
-      sells = Sell.find_by_user_id(decoded_auth_token[:user_id])
-      sells.destroy!
-      render json: {success: true, msg:'Sells has been deleted', data:sells}, status: :ok
     end
 
     private

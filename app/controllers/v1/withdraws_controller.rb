@@ -27,52 +27,30 @@ module V1
       @withdraws = Withdraw.new
       @withdraws.name_bank = params[:name_bank]
       @withdraws.account_number = params[:account_number]
-      @withdraws.cash_balance = params[:cash_balance]
+      @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]
-      @withdraws.date = params[:date]
-      @withdraws.withdraw = params[:withdraw]
-      @withdraws.status = params[:status]
+      @withdraws.status = "sedang-diproses"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @checkBalances.balance_value >= params[:withdraw]
+      if @checkBalances.balance_value >= params[:ammount].to_f
         if @withdraws.save
-          @sum = @checkBalances.balance_value - params[:withdraw]
-          @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: params[:currency])
-          render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
+          render json: {
+              success: true, 
+              msg:'Withdraws is saved', 
+              data:{
+                withdraw: @withdraws,
+                balance: @checkBalances
+              }
+            }, status: :ok
         else
           render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
         end
       else
         render json: {
           success: false, 
-          msg:'Balances tidak mencukupi'
+          msg:'Balances amount tidak mencukupi'
           }, status: :ok
       end
-    end
-
-    def update
-      @withdraws = Withdraw.find_by_user_id(decoded_auth_token[:user_id])
-      @withdraws.name_bank = params[:name_bank]
-      @withdraws.account_number = params[:account_number]
-      @withdraws.cash_balance = params[:cash_balance]
-      @withdraws.ammount = params[:ammount]
-      @withdraws.date = params[:date]
-      @withdraws.withdraw = params[:withdraw]
-      @withdraws.status = params[:status]
-      @withdraws.user_id = params[:user_id]
-      
-      if @withdraws.save
-        render json: {success: true, msg:'Withdraw is update', data:@withdraws}, status: :ok
-      else
-        render json: {success: false, msg:'Withdraw is not update', data:@withdraws.errors}, status: :ok
-      end
-    end
-
-    def destroy
-      withdraws = Withdraw.find_by_user_id(decoded_auth_token[:user_id])
-      withdraws.destroy!
-      render json: {success: true, msg:'Withdraw has been deleted', data:withdraws}, status: :ok
     end
 
     private

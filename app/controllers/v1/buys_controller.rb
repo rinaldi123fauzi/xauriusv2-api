@@ -22,40 +22,56 @@ module V1
     end
 
     def create
-      @buys = Buy.new
-      @buys.spend = params[:spend]
-      @buys.summary = params[:summary]
-      @buys.date = params[:date]
-      @buys.price = params[:price]
-      @buys.quantity = params[:quantity]
-      @buys.status = params[:status]
-      @buys.user_id = decoded_auth_token[:user_id]
-      if @buys.save
-        render json: {success: true, msg:'Buys is saved', data:@buys}, status: :ok
-      else
-        render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
-      end
-    end
+      # Harga per satu XAU
+      harga_satu_xau = 1000000
 
-    def update
-      @buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
-      @buys.spend = params[:spend]
-      @buys.summary = params[:summary]
-      @buys.date = params[:date]
-      @buys.price = params[:price]
-      @buys.quantity = params[:quantity]
-      @buys.status = params[:status]
-      if @buys.save
-        render json = {success: true, msg:'Buys is update', data:@buys}, status: :ok
-      else
-        render json = {success: false, msg:'Buys is not update', data:@buys.errors}, status: :ok
-      end
-    end
+      # Cari User ID yang exists
+      balances = Balance.where(user_id: decoded_auth_token[:user_id])
+      if balances.count == 1
 
-    def destroy
-      buys = Buy.find_by_user_id(decoded_auth_token[:user_id])
-      buys.destroy!
-      render json: {success: true, msg:'Buys has been deleted', data:buys}, status: :ok
+        # Cari nilai balance
+        balance = balances.first
+        if balance.balance_value >= params[:price].to_f
+          
+          # hitung per harga satu XAU dan balance xau
+          hitungXau = params[:price].to_f / harga_satu_xau
+          sum = hitungXau.to_f + balance.balance_xau
+          
+          # Update Balance
+          balance.balance_value = balance.balance_value - params[:price].to_f
+          balance.balance_xau = sum
+          balance.save
+
+          # Tambah buy
+          @buys = Buy.new
+          @buys.summary = hitungXau.to_f
+          @buys.price = params[:price]
+          @buys.user_id = decoded_auth_token[:user_id]
+          
+          if @buys.save
+            render json: {
+              success: true, 
+              msg:'Buys is saved', 
+              data:{
+                buys: @buys,
+                balance: balance
+              }
+            }, status: :ok
+          else
+            render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
+          end
+        else
+          render json: {
+            success: false, 
+            msg:'Balance anda tidak mencukupi', 
+            data:{
+              balance: balance
+            }
+          },status: :ok
+        end
+      else
+        render json: {success: false, msg:'User tidak ditemukan'}, status: :ok
+      end
     end
 
     private

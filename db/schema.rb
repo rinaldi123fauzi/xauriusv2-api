@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_21_094210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "balance_xau", default: "0.0"
     t.index ["user_id"], name: "index_balances_on_user_id"
   end
 
@@ -60,12 +61,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
   end
 
   create_table "buys", force: :cascade do |t|
-    t.decimal "spend"
     t.decimal "summary"
-    t.datetime "date"
     t.decimal "price"
-    t.decimal "quantity"
-    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -74,15 +71,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
 
   create_table "deposits", force: :cascade do |t|
     t.string "name_bank"
-    t.decimal "unit_price"
-    t.decimal "quantity"
     t.decimal "total"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "date"
-    t.string "order"
-    t.bigint "user_id", null: false
     t.string "status"
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_deposits_on_user_id"
   end
 
@@ -104,12 +97,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
   end
 
   create_table "sells", force: :cascade do |t|
-    t.decimal "sell"
     t.decimal "summary"
-    t.datetime "date"
-    t.decimal "quantity"
     t.decimal "price"
-    t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -156,15 +145,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_17_134135) do
   create_table "withdraws", force: :cascade do |t|
     t.string "name_bank"
     t.integer "account_number"
-    t.decimal "cash_balance"
     t.decimal "ammount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "date"
-    t.string "order"
-    t.decimal "withdraw"
-    t.integer "status"
+    t.string "status"
     t.bigint "user_id", null: false
+    t.string "name"
     t.index ["user_id"], name: "index_withdraws_on_user_id"
   end
 

@@ -8,7 +8,10 @@
 #  currency      :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  balance_xau   :decimal(, )      default(0.0)
 #
 class Balance < ApplicationRecord
   belongs_to :user
+
+  validates :currency, inclusion: { in: %w(XAU IDR), allow_nil: true, message: "%{value} bukan currency yang benar" }
 end
