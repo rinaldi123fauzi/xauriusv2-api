@@ -71,6 +71,42 @@ module V1
         end
       end
 
+      # approve withdraw rupiah
+      def approve_withdraw
+        withdraw_id = params[:withdraw_id]
+        
+        withdraws = Withdraw.where(id: withdraw_id, status: 'sedang-diproses')
+
+        # cek withdraws
+        if withdraws.count == 1
+          withdraw = withdraws.first
+
+          balances = Balance.where(user_id: withdraw.user_id, currency: 'IDR')
+
+          balance = balances.first
+
+          # proses pengurangan balance
+          sum = balance.balance_value - withdraw.ammount
+          balance.balance_value = sum
+          balance.save
+          
+          # ubah status
+          withdraw.status = 'selesai'
+          withdraw.save
+
+          render json: {
+              success: true, 
+              msg: 'Withdraw success',
+              data:{
+                withdraw: withdraw,
+                balance: balance
+              }
+            }, status: :ok
+        else
+          render json: {success: false, msg: 'Mungkin status sudah selesai'}, status: :ok
+        end
+      end
+
       private
       def decoded_auth_token
         if request.headers["JWT"]

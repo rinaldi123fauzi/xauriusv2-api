@@ -29,22 +29,26 @@ module V1
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]
-      @withdraws.status = "menunggu-pembayaran"
+      @withdraws.status = "sedang-diproses"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
       if @checkBalances.balance_value >= params[:ammount].to_f
         if @withdraws.save
-          @sum = @checkBalances.balance_value - params[:ammount].to_f
-          @checkBalances.update(balance_value: @sum)          
-          @checkBalances.update(currency: 'IDR')
-          render json: {success: true, msg:'Withdraws is saved', data:@withdraws}, status: :ok
+          render json: {
+              success: true, 
+              msg:'Withdraws is saved', 
+              data:{
+                withdraw: @withdraws,
+                balance: @checkBalances
+              }
+            }, status: :ok
         else
           render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
         end
       else
         render json: {
           success: false, 
-          msg:'Balances tidak mencukupi'
+          msg:'Balances amount tidak mencukupi'
           }, status: :ok
       end
     end

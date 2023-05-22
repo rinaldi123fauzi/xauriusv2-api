@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       scope :verify do
         post 'approve-deposit'                => 'verify#approve_deposit'
         post 'approve-kyc'                    => 'verify#approve_kyc'
+        post 'approve-withdraw'               => 'verify#approve_withdraw'
       end
     end
 
@@ -75,7 +76,7 @@ Rails.application.routes.draw do
 
     #Withdraws
     scope :withdraws do
-      post 'save'                             => 'withdraws#create'
+      post 'create'                           => 'withdraws#create'
       get '/'                                 => 'withdraws#index'
       get 'detail'                            => 'withdraws#show'
     end

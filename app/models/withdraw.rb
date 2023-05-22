@@ -14,4 +14,6 @@
 #
 class Withdraw < ApplicationRecord
     belongs_to :user
+
+    validates :status, inclusion: { in: %w(sedang-diproses selesai), allow_nil: true, message: "%{value} bukan status yang benar" }
 end
