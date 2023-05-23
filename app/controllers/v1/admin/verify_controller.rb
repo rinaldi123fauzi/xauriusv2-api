@@ -107,7 +107,7 @@ module V1
         end
       end
 
-      # approve withdraw rupiah
+      # approve withdraw crypto
       def approve_withdraw_crypto
         withdraw_id = params[:withdraw_crypto_id]
         
