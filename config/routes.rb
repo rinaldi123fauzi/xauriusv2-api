@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :withdraw_cryptos
   resources :balances
   resources :businesses
 
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
         post 'approve-deposit'                => 'verify#approve_deposit'
         post 'approve-kyc'                    => 'verify#approve_kyc'
         post 'approve-withdraw'               => 'verify#approve_withdraw'
+        post 'approve-withdraw-crypto'               => 'verify#approve_withdraw_crypto'
       end
     end
 
@@ -79,6 +81,13 @@ Rails.application.routes.draw do
       post 'create'                           => 'withdraws#create'
       get '/'                                 => 'withdraws#index'
       get 'detail'                            => 'withdraws#show'
+    end
+
+    #Withdraws Crypto
+    scope :withdraw_crypto do
+      post 'create'                           => 'withdraw_crypto#create'
+      get '/'                                 => 'withdraw_crypto#index'
+      get 'detail'                            => 'withdraw_crypto#show'
     end
 
     #Users

@@ -1,0 +1,28 @@
+# == Schema Information
+#
+# Table name: withdraw_cryptos
+#
+#  id         :bigint           not null, primary key
+#  name       :string
+#  xau_amount :decimal(, )
+#  status     :string
+#  user_id    :bigint           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  name_bank: MyString
+  account_number: 1
+  name: MyString
+  xau_amount: 9.99
+  status: MyString
+  user: one
+
+two:
+  name_bank: MyString
+  account_number: 1
+  name: MyString
+  xau_amount: 9.99
+  status: MyString
+  user: two
