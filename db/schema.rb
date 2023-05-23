@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_21_094210) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_23_125258) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,6 +67,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_21_094210) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_buys_on_user_id"
+  end
+
+  create_table "chartprices", force: :cascade do |t|
+    t.string "chartprice_exchange"
+    t.string "chartprice_datetime"
+    t.decimal "chartprice_buy"
+    t.decimal "chartprice_sell"
+    t.decimal "chartprice_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charts", force: :cascade do |t|
+    t.decimal "copen"
+    t.decimal "clow"
+    t.decimal "chigh"
+    t.decimal "cclose"
+    t.datetime "cdate"
+    t.string "cdatestr"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "deposits", force: :cascade do |t|
