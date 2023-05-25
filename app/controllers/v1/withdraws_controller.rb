@@ -27,7 +27,6 @@ module V1
 
       @withdraws = Withdraw.new
       @withdraws.bank_id = params[:bank_id]
-      @withdraws.name_bank = params[:name_bank]
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]
