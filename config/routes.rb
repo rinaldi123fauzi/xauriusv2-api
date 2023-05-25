@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :banks
   resources :withdraw_cryptos
   resources :balances
   resources :businesses

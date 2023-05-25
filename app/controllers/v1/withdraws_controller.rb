@@ -26,6 +26,7 @@ module V1
       @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
 
       @withdraws = Withdraw.new
+      @withdraws.bank_id = params[:bank_id]
       @withdraws.name_bank = params[:name_bank]
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
