@@ -28,7 +28,6 @@ module V1
       @withdraws = WithdrawCrypto.new
       @withdraws.address = params[:address]
       @withdraws.network = params[:network]
-      @withdraws.name = params[:name]
       @withdraws.xau_amount = params[:xau_amount]
       @withdraws.status = "buat"
       @withdraws.user_id = decoded_auth_token[:user_id]
