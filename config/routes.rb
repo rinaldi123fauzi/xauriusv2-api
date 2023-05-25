@@ -20,7 +20,15 @@ Rails.application.routes.draw do
         post 'approve-deposit'                => 'verify#approve_deposit'
         post 'approve-kyc'                    => 'verify#approve_kyc'
         post 'approve-withdraw'               => 'verify#approve_withdraw'
-        post 'approve-withdraw-crypto'               => 'verify#approve_withdraw_crypto'
+        post 'approve-withdraw-crypto'        => 'verify#approve_withdraw_crypto'
+      end
+
+      #Bank
+      scope :bank do
+        get '/'                                 => 'bank#index'
+        post 'create'                           => 'bank#create'
+        post 'update'                           => 'bank#update'
+        delete 'delete'                         => 'bank#destroy'
       end
     end
 
