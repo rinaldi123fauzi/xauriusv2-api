@@ -2,14 +2,14 @@
 #
 # Table name: withdraw_cryptos
 #
-#  id         :bigint           not null, primary key
-#  xau_amount :decimal(, )
-#  status     :string
-#  user_id    :bigint           not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  address    :string
-#  network    :string
+#  id             :bigint           not null, primary key
+#  xau_amount     :decimal(, )
+#  status         :string
+#  user_id        :bigint           not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  address        :string
+#  evm_network_id :bigint           not null
 #
 require "test_helper"
 

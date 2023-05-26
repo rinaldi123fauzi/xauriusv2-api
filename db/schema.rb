@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_25_023124) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_023124) do
     t.index ["user_id"], name: "index_deposits_on_user_id"
   end
 
+  create_table "evm_networks", force: :cascade do |t|
+    t.string "network_name"
+    t.string "rpc_url"
+    t.integer "chain_id"
+    t.string "currency_symbol"
+    t.text "explorer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.string "full_name"
     t.string "phone_number"
@@ -155,7 +165,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_023124) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "address"
-    t.string "network"
+    t.bigint "evm_network_id", null: false
+    t.index ["evm_network_id"], name: "index_withdraw_cryptos_on_evm_network_id"
     t.index ["user_id"], name: "index_withdraw_cryptos_on_user_id"
   end
 
@@ -182,6 +193,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_25_023124) do
   add_foreign_key "profiles", "users"
   add_foreign_key "sells", "users"
   add_foreign_key "transfers", "users"
+  add_foreign_key "withdraw_cryptos", "evm_networks"
   add_foreign_key "withdraw_cryptos", "users"
   add_foreign_key "withdraws", "banks"
   add_foreign_key "withdraws", "users"
