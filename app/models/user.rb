@@ -32,4 +32,7 @@ class User < ApplicationRecord
     has_one :balance, dependent: :destroy
     has_many :buy, dependent: :destroy
     has_many :sell, dependent: :destroy
+    has_many :withdraw_crypto, dependent: :destroy
+
+    validates :email, uniqueness: true
 end

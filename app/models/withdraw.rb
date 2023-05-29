@@ -11,9 +11,10 @@
 #  status         :string
 #  user_id        :bigint           not null
 #  name           :string
+#  bank_id        :bigint           not null
 #
 class Withdraw < ApplicationRecord
     belongs_to :user
-
+    belongs_to :bank
     validates :status, inclusion: { in: %w(sedang-diproses selesai), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

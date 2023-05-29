@@ -2,6 +2,7 @@ module V1
   class BuysController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
+    # before_action :check_status_kyc
 
     def index
       buys = Buy.where(user_id: decoded_auth_token[:user_id])
@@ -77,6 +78,13 @@ module V1
     private
     def buy_params
       params.require(:buy).permit(:spend,:summary,:date,:price,:quantity,:status,:user_id)
+    end
+
+    def check_status_kyc
+      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
+      if profile.status_kyc == false
+        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
+      end
     end
 
     def decoded_auth_token
