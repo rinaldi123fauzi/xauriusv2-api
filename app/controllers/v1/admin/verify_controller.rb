@@ -107,6 +107,42 @@ module V1
         end
       end
 
+      # approve withdraw crypto
+      def approve_withdraw_crypto
+        withdraw_id = params[:withdraw_crypto_id]
+        
+        withdraws = WithdrawCrypto.where(id: withdraw_id, status: 'buat')
+
+        # cek withdraws
+        if withdraws.count == 1
+          withdraw = withdraws.first
+
+          balances = Balance.where(user_id: withdraw.user_id)
+
+          balance = balances.first
+
+          # proses pengurangan balance
+          sum = balance.balance_xau - withdraw.xau_amount
+          balance.balance_xau = sum
+          balance.save
+          
+          # ubah status
+          withdraw.status = 'selesai'
+          withdraw.save
+
+          render json: {
+              success: true, 
+              msg: 'Withdraw Crypto success',
+              data:{
+                withdraw: withdraw,
+                balance: balance
+              }
+            }, status: :ok
+        else
+          render json: {success: false, msg: 'Mungkin status sudah selesai'}, status: :ok
+        end
+      end
+
       private
       def decoded_auth_token
         if request.headers["JWT"]

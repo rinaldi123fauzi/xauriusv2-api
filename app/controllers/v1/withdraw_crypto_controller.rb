@@ -1,11 +1,11 @@
 module V1
-  class WithdrawsController < ApplicationController
+  class WithdrawCryptoController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
     # before_action :check_status_kyc
 
     def index
-      withdraws = Withdraw.where(user_id: decoded_auth_token[:user_id])
+      withdraws = WithdrawCrypto.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      withdraws = Withdraw.find_by_user_id(decoded_auth_token[:user_id])
+      withdraws = WithdrawCrypto.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
@@ -25,39 +25,35 @@ module V1
     def create
       @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
 
-      @withdraws = Withdraw.new
-      @withdraws.bank_id = params[:bank_id]
-      @withdraws.account_number = params[:account_number]
-      @withdraws.name = params[:name]
-      @withdraws.ammount = params[:ammount]
-      @withdraws.status = "sedang-diproses"
+      @withdraws = WithdrawCrypto.new
+      @withdraws.address = params[:address]
+      @withdraws.network = params[:network]
+      @withdraws.xau_amount = params[:xau_amount]
+      @withdraws.status = "buat"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @checkBalances.balance_value >= params[:ammount].to_f
+      if @checkBalances.balance_xau >= params[:xau_amount].to_f
         if @withdraws.save
           render json: {
               success: true, 
-              msg:'Withdraws is saved', 
+              msg:'Withdraws Crypto is saved', 
               data:{
                 withdraw: @withdraws,
                 balance: @checkBalances
               }
             }, status: :ok
         else
-          render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
+          render json: {success: false, msg:'Withdraws Crypto is not saved', data:@withdraws.errors}, status: :unprocessable_entity
         end
       else
         render json: {
           success: false, 
-          msg:'Balances amount tidak mencukupi'
+          msg:'Balances XAU tidak mencukupi'
           }, status: :ok
       end
     end
 
     private
-    def withdraw_params
-      params.require(:withdraw).permit(:name_bank,:account_number,:cash_balance,:ammount,:date,:withdraw,:status,:user_id)
-    end
 
     def decoded_auth_token
       if request.headers["JWT"]
@@ -86,4 +82,4 @@ module V1
 
   end
 end
-  
+    

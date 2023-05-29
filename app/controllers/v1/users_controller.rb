@@ -2,6 +2,7 @@ module V1
   class UsersController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
+    # before_action :check_status_kyc
 
     def index
       users = User.where(id: decoded_auth_token[:user_id])
@@ -54,6 +55,13 @@ module V1
         @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
       else
         @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
+      end
+    end
+
+    def check_status_kyc
+      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
+      if profile.status_kyc == false
+        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
       end
     end
 

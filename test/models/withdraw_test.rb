@@ -11,6 +11,7 @@
 #  status         :string
 #  user_id        :bigint           not null
 #  name           :string
+#  bank_id        :bigint           not null
 #
 require "test_helper"
 
