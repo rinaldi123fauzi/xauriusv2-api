@@ -24,14 +24,13 @@ class GetAntamPrice < ApplicationJob
         puts 'sell_price'
         puts sell_price
 
-        mid_price = table.css('td')[2].text.delete(',').to_f
-        puts 'mid_price'
-        puts mid_price
-
-        buy_price = table.css('td')[3].text.delete(',').to_f
+        buy_price = table.css('td')[2].text.delete(',').to_f
         puts 'buy_price'
         puts buy_price
 
+        mid_price = (buy_price + sell_price) / 2
+        puts 'mid_price'
+        puts mid_price
 
         # ambil apakah ini adalah harga pertama
         # jika harga pertama, maka langsung saja simpan didalam tabel
