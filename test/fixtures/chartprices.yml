@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: chartprices
+#
+#  id                  :bigint           not null, primary key
+#  chartprice_exchange :string
+#  chartprice_datetime :string
+#  chartprice_buy      :decimal(, )
+#  chartprice_sell     :decimal(, )
+#  chartprice_price    :decimal(, )
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#
+
+one:
+  chartprice_exchange: MyString
+  chartprice_datetime: MyString
+  chartprice_buy: 9.99
+  chartprice_sell: 9.99
+  chartprice_price: 9.99
+
+two:
+  chartprice_exchange: MyString
+  chartprice_datetime: MyString
+  chartprice_buy: 9.99
+  chartprice_sell: 9.99
+  chartprice_price: 9.99

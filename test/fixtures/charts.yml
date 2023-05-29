@@ -1,0 +1,30 @@
+# == Schema Information
+#
+# Table name: charts
+#
+#  id         :bigint           not null, primary key
+#  copen      :decimal(, )
+#  clow       :decimal(, )
+#  chigh      :decimal(, )
+#  cclose     :decimal(, )
+#  cdate      :datetime
+#  cdatestr   :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+one:
+  copen: 9.99
+  clow: 9.99
+  chigh: 9.99
+  cclose: 9.99
+  cdate: 2023-05-23 12:52:58
+  cdatestr: MyString
+
+two:
+  copen: 9.99
+  clow: 9.99
+  chigh: 9.99
+  cclose: 9.99
+  cdate: 2023-05-23 12:52:58
+  cdatestr: MyString

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
+  # TODO: Sepertinya ini gak ada deh
   post 'authenticate', to: 'authentication#authenticate'
 
   namespace :v1 do
@@ -44,6 +45,11 @@ Rails.application.routes.draw do
 
       post 'change-password'                  => 'auth#change_password'
       post 'signout'                          => 'auth#destroy'
+    end
+
+    scope :charts do 
+      get '/'          => 'charts#index'
+      get 'last-price' => 'charts#last_price'
     end
 
     #Balances

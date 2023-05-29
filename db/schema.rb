@@ -42,6 +42,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "antamprices", force: :cascade do |t|
+    t.text "antamprice_scaptext"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "balances", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.decimal "balance_value"
@@ -73,6 +79,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_buys_on_user_id"
+  end
+
+  create_table "chartprices", force: :cascade do |t|
+    t.string "chartprice_exchange"
+    t.string "chartprice_datetime"
+    t.decimal "chartprice_buy"
+    t.decimal "chartprice_sell"
+    t.decimal "chartprice_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charts", force: :cascade do |t|
+    t.decimal "copen"
+    t.decimal "clow"
+    t.decimal "chigh"
+    t.decimal "cclose"
+    t.datetime "cdate"
+    t.string "cdatestr"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "deposits", force: :cascade do |t|
