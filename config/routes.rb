@@ -47,6 +47,11 @@ Rails.application.routes.draw do
       post 'signout'                          => 'auth#destroy'
     end
 
+    scope :charts do 
+      get '/'          => 'charts#index'
+      get 'last-price' => 'charts#last_price'
+    end
+
     #Balances
     scope :balances do
       get '/'                                 => 'balances#index'
