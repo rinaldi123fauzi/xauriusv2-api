@@ -13,6 +13,6 @@
 #
 class WithdrawCrypto < ApplicationRecord
   belongs_to :user
-
+  belongs_to :evm_network
   validates :status, inclusion: { in: %w(buat tidak-terkirim selesai), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

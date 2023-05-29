@@ -12,4 +12,5 @@
 #  updated_at      :datetime         not null
 #
 class EvmNetwork < ApplicationRecord
+    has_many :withdraw_crypto
 end
