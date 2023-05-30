@@ -1,5 +1,5 @@
 module Adm
-  class EvmNetworkController < ApplicationController
+  class EvmNetworksController < ApplicationController
     include ActionController::Cookies
     # before_action :authenticate_request
 
@@ -83,9 +83,9 @@ module Adm
 
     def authenticate_request
       if request.headers["JWT"]
-        @current_user = AuthorizeApiRequest.call(request.headers["JWT"]).result
+        @current_user = AuthAdminRequest.call(request.headers["JWT"]).result
       else
-        @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
+        @current_user = AuthAdminRequest.call(cookies[:JWT]).result
       end
   
       render json: { error: 'Not Authorized' }, status: 401 unless @current_user

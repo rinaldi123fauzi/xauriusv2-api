@@ -1,74 +1,71 @@
 module Adm
-  class SellsController < ApplicationController
+  class BanksController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
 
     def index
-      sells = Sell.all
+      buys = Bank.all
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: sells
+        data: buys
       }
     end
 
     def show
-      sells = Sell.find(params[:sell_id])
+      buys = Bank.find(params[:bank_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: sells
+        data: buys
       }
     end
 
     def create
-      @sells = Sell.new
-      @sells.summary  = params[:summary]
-      @sells.price    = params[:price]
-      @sells.user_id  = params[:user_id]
-
-      if @sells.save
+      @buys = Bank.new
+      @buys.name_bank = params[:name_bank]
+      
+      if @buys.save
         render json: {
           success: true, 
-          msg:'Sells is saved', 
+          msg:'Banks is saved', 
           data:{
-            sells: @sells,
-            balances: balance
+            buys: @buys,
+            balance: balance
           }
         }, status: :ok
       else
-        render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Banks is not saved', data:@buys.errors}, status: :unprocessable_entity
       end
     end
 
     def update
-      @sells = Sell.find(params[:sell_id])
-      @sells.summary  = params[:summary]
-      @sells.price    = params[:price]
-      @sells.user_id  = params[:user_id]
-      if @sells.save
+      @buys = Bank.find(params[:bank_id])
+      @buys.name_bank = params[:name_bank]
+      
+      if @buys.save
         render json: {
           success: true, 
-          msg:'Sells is saved', 
+          msg:'Banks is saved', 
           data:{
-            sells: @sells,
-            balances: balance
+            buys: @buys,
+            balance: balance
           }
         }, status: :ok
       else
-        render json: {success: false, msg:'Sells is not saved', data:@sells.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Banks is not saved', data:@buys.errors}, status: :unprocessable_entity
       end
     end
 
     def destroy
-      sell = Sell.find(params[:sell_id])
-      sell.destroy!
-      render json: {success: true, msg:'Sell has been deleted', data:sell}, status: :ok
+      buys = Bank.find(params[:bank_id])
+      buys.destroy!
+      render json: {success: true, msg:'Banks has been deleted', data:buys}, status: :ok
     end
 
     private
-    def sell_params
-      params.require(:sell).permit(:sell,:summary,:date,:price,:quantity,:status,:user_id)
+    def buy_params
+      params.require(:buy).permit(:spend,:summary,:date,:price,:quantity,:status,:user_id)
     end
 
     def decoded_auth_token
@@ -91,4 +88,4 @@ module Adm
 
   end
 end
-    
+      

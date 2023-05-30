@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :auth_admins
   resources :evm_networks
   resources :banks
   resources :withdraw_cryptos
@@ -10,10 +11,29 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
-  # TODO: Sepertinya ini gak ada deh
-  post 'authenticate', to: 'authentication#authenticate'
-
   namespace :adm do
+    # Login
+    scope :auth do
+      post 'login'                            => 'auth#login'
+      post 'register'                         => 'auth#register'
+      get  'email-verification'               => 'auth#register_vercode'                  # submit kode verifikasi untuk memverifikasi emailnya (metode get jika langsung)
+      post 'email-verification'               => 'auth#register_vercode'                  # submit kode verifikasi untuk memverifikasi emailnya (metode post, jika view pakai vuejs atau dari mobile app)
+      post 'email-verification-token-request' => 'auth#email_verification_token_request'  # permintaan ulang kode verifikasi ke email
+      post 'forgot-password'                  => 'auth#forgot_password'
+
+      post 'change-password'                  => 'auth#change_password'
+      post 'signout'                          => 'auth#destroy'
+    end
+
+    #Banks
+    scope :banks do
+      get '/'                                 => 'banks#index'
+      post 'create'                           => 'banks#create'
+      get 'detail'                            => 'banks#show'
+      post 'update'                           => 'banks#update'
+      delete 'delete'                         => 'banks#destroy'
+    end
+
     #Balances
     scope :balances do
       get '/'                                 => 'balances#index'
@@ -79,6 +99,7 @@ Rails.application.routes.draw do
 
     #Users
     scope :users do
+      post 'create'                           => 'users#create'
       post 'update'                           => 'users#update'
       get '/'                                 => 'users#index'
       get 'detail'                            => 'users#show'
@@ -87,6 +108,7 @@ Rails.application.routes.draw do
 
     #Evm Networks
     scope :evm_networks do
+      post 'create'                           => 'evm_networks#create'
       post 'update'                           => 'evm_networks#update'
       get '/'                                 => 'evm_networks#index'
       get 'detail'                            => 'evm_networks#show'

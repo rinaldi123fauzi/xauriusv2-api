@@ -1,7 +1,7 @@
 module Adm
   class UsersController < ApplicationController
     include ActionController::Cookies
-    # before_action :authenticate_request
+    before_action :authenticate_request
 
     def index
       users = User.all
@@ -29,7 +29,6 @@ module Adm
       @users.email            = params[:email]
       @users.is_active        = params[:is_active]
       @users.is_email_verify  = params[:is_email_verify]
-      @users.is_usaha         = params[:is_usaha]
       
       if @users.save
         render json: {success: true, msg:'Users is create', data:@users}, status: :ok
@@ -46,7 +45,6 @@ module Adm
       @users.email            = params[:email]
       @users.is_active        = params[:is_active]
       @users.is_email_verify  = params[:is_email_verify]
-      @users.is_usaha         = params[:is_usaha]
       if @users.save
         render json: {success: true, msg:'Users is update', data:@users}, status: :ok
       else
@@ -75,9 +73,9 @@ module Adm
 
     def authenticate_request
       if request.headers["JWT"]
-        @current_user = AuthorizeApiRequest.call(request.headers["JWT"]).result
+        @current_user = AuthAdminRequest.call(request.headers["JWT"]).result
       else
-        @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
+        @current_user = AuthAdminRequest.call(cookies[:JWT]).result
       end
   
       render json: { error: 'Not Authorized' }, status: 401 unless @current_user
