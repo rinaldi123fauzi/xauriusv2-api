@@ -13,7 +13,7 @@ class V1::ChartsController < ApplicationController
     @current_gold_price = Chartprice.where(chartprice_exchange: "app_price").last
 
     render json: {
-      status: 'success',
+      success: true,
       data: {
         price: @current_gold_price.chartprice_price,
         buy: @current_gold_price.chartprice_buy,
@@ -21,7 +21,5 @@ class V1::ChartsController < ApplicationController
       }
     }
   end
-
-
 end
   
