@@ -30,6 +30,7 @@ module Adm
       @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
       @profile.country       = params[:country] if params[:country] && params[:country] != ""
       @profile.status_kyc    = params[:status_kyc] if params[:status_kyc] && params[:status_kyc] != "" 
+      @profile.user_id       = params[:user_id] if params[:user_id] && params[:user_id] != "" 
 
       if params[:file_npwp] && params[:file_npwp] != ""
         @profile.file_npwp = params[:file_npwp]
@@ -73,6 +74,7 @@ module Adm
       @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
       @profile.country       = params[:country] if params[:country] && params[:country] != ""
       @profile.status_kyc    = params[:status_kyc] if params[:status_kyc] && params[:status_kyc] != "" 
+      @profile.user_id       = params[:user_id] if params[:user_id] && params[:user_id] != "" 
 
       if params[:file_npwp] && params[:file_npwp] != ""
         @profile.file_npwp   = params[:file_npwp]

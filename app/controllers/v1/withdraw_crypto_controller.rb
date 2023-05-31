@@ -26,8 +26,8 @@ module V1
       @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
 
       @withdraws = WithdrawCrypto.new
+      @withdraws.evm_network_id = params[:evm_network_id]
       @withdraws.address = params[:address]
-      @withdraws.network = params[:network]
       @withdraws.xau_amount = params[:xau_amount]
       @withdraws.status = "buat"
       @withdraws.user_id = decoded_auth_token[:user_id]

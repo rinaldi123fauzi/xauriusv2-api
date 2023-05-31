@@ -23,8 +23,8 @@ module Adm
 
     def create
       @withdraws = WithdrawCrypto.new
+      @withdraws.evm_network_id = params[:evm_network_id]
       @withdraws.address    = params[:address]
-      @withdraws.network    = params[:network]
       @withdraws.xau_amount = params[:xau_amount]
       @withdraws.status     = "buat"
       @withdraws.user_id    = params[:user_id]
@@ -44,8 +44,8 @@ module Adm
 
     def update
       @withdraws = WithdrawCrypto.find(params[:withdraw_crypto_id])
+      @withdraws.evm_network_id = params[:evm_network_id]
       @withdraws.address    = params[:address]
-      @withdraws.network    = params[:network]
       @withdraws.xau_amount = params[:xau_amount]
       @withdraws.status     = "buat"
       @withdraws.user_id    = params[:user_id]
