@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_04_130203) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_04_141548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,7 +84,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_04_130203) do
 
   create_table "block_eth_addrs", force: :cascade do |t|
     t.string "address"
-    t.bigint "user_id"
+    t.bigint "user_id", default: 0
     t.string "db_name"
     t.bigint "tbl_id"
     t.datetime "created_at", null: false

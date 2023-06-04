@@ -53,13 +53,13 @@ module Adm
       @withdraws.user_id        = params[:user_id]
       if @withdraws.save
         render json: {
-            success: true, 
-            msg:'Withdraws is saved', 
-            data:{
-              withdraw: @withdraws,
-              balance: @checkBalances
-            }
-          }, status: :ok
+          success: true, 
+          msg:'Withdraws is saved', 
+          data:{
+            withdraw: @withdraws,
+            balance: @checkBalances
+          }
+        }, status: :ok
       else
         render json: {success: false, msg:'Withdraws is not saved', data:@withdraws.errors}, status: :unprocessable_entity
       end
