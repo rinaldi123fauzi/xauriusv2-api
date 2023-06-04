@@ -70,7 +70,7 @@ class V1::ProfilesController < ApplicationController
         end
       else 
         render json: {
-          status: false,
+          success: false,
           msg: 'KYC tidak boleh di edit'
         }
       end
