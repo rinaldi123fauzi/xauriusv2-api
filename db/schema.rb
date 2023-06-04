@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_04_130203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "auth_admins", force: :cascade do |t|
+    t.string "username"
+    t.string "password"
+    t.string "password_digest"
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "is_active"
+    t.string "gender"
+    t.string "phone"
+    t.string "email_vercode"
+    t.boolean "is_email_verify"
+    t.integer "pass_reset_token"
+    t.integer "session_id"
+    t.string "jwt_token"
+  end
+
   create_table "balances", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.decimal "balance_value"
@@ -60,6 +78,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_26_132537) do
 
   create_table "banks", force: :cascade do |t|
     t.string "name_bank"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "block_eth_addrs", force: :cascade do |t|
+    t.string "address"
+    t.bigint "user_id"
+    t.string "db_name"
+    t.bigint "tbl_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

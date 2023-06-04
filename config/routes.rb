@@ -47,6 +47,14 @@ Rails.application.routes.draw do
       post 'signout'                          => 'auth#destroy'
     end
 
+    scope :blocks do 
+      post 'coin-deposit-manual'         => 'blocks#coin_deposit_manual'         
+      post 'erc20-deposit-manual'        => 'blocks#erc20_deposit_manual'         
+      get  'used-ethereum-address-count' => 'blocks#used_ethereum_address_count'
+      get  'all-ethereum-addresses'      => 'blocks#all_ethereum_addresses'
+      post 'load-eth-address'            => 'blocks#load_eth_address'
+    end
+
     scope :charts do 
       get '/'          => 'charts#index'
       get 'last-price' => 'charts#last_price'
@@ -76,6 +84,7 @@ Rails.application.routes.draw do
       get '/'                                 => 'profiles#index'
       post 'update'                           => 'profiles#update'
       get 'detail'                            => 'profiles#show'
+      get 'address'                           => 'profiles#address'
     end
 
     #Sells
@@ -113,6 +122,8 @@ Rails.application.routes.draw do
       get 'detail'                            => 'users#show'
       delete 'delete'                         => 'users#destroy'
     end
+
+    
   end
   
   #cara lama

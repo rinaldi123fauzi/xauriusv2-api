@@ -59,6 +59,28 @@ module V1
           if profile.status_kyc == false
             profile.status_kyc = true
             if profile.save
+
+              # INI PERLU DIMASUKKAN NANTI.
+              # KETIKA USER DI APPROVE KYC, MAKA DIBUAT JUGA ADDRESS DIA 
+              # 1. Cek apakah user ini sudah punya address (Paraniod tipe. padahal disini kan ini baru approve KYC. Tetapi metode ini lebih baik)
+              # Periksa terlebih dahulu apakah user ini sudah punya adress atau belum.
+              datas = BlockEthAddr.where(user_id: user_id)
+
+              if datas.count == 0
+
+                # periksa apakah masih ada address yang nganggur 
+                addrs = BlockEthAddr.where("user_id = 0 or user_id is null")
+
+                if addrs.count > 0
+                  addr = BlockEthAddr.where("user_id = 0 or user_id is null").first 
+                  addr.user_id = user_id
+                  addr.save 
+                else  
+                  # TODO: kirim email kepada admin untuk load address baru
+                end
+              end
+
+              # semua respon langsung success
               render json: {success: true, msg:'KYC Terverifikasi', data: ActiveModelSerializers::SerializableResource.new(profile, each_serializer: ProfileSerializer)}, status: :ok
             else
               render json: {success: false, msg:'KYC gagal verifikasi', data: profile.error}, status: :ok

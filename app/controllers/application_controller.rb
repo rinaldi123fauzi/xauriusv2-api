@@ -11,4 +11,12 @@ class ApplicationController < ActionController::API
   
     #   render json: { error: 'Not Authorized' }, status: 401 unless @current_user
     # end
+
+    def app_fail_render(msg)
+      render json: {
+        success: false,
+        msg: msg
+      }
+    end
+
 end 
