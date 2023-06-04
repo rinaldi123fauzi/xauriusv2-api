@@ -2,7 +2,7 @@ module V1
   class TransfersController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    # before_action :check_status_kyc
+    before_action :check_status_kyc
 
     def index
       transfers = Transfer.where(user_id: decoded_auth_token[:user_id])

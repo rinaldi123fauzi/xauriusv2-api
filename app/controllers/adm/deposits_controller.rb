@@ -1,11 +1,10 @@
-module V1
+module Adm
   class DepositsController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    before_action :check_status_kyc
 
     def index
-      deposits = Deposit.where(user_id: decoded_auth_token[:user_id])
+      deposits = Deposit.all
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
@@ -14,7 +13,7 @@ module V1
     end
 
     def show
-      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
+      deposits = Deposit.find(params[:deposit_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
@@ -26,7 +25,7 @@ module V1
       @deposits = Deposit.new
       @deposits.name_bank = params[:name_bank]
       @deposits.total     = params[:total]
-      @deposits.user_id   = decoded_auth_token[:user_id]
+      @deposits.user_id   = params[:user_id]
       @deposits.status    = "menunggu-pembayaran"
       if @deposits.save
         render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
@@ -35,16 +34,28 @@ module V1
       end
     end
 
+    def update
+      @deposits = Deposit.find(params[:deposit_id])
+      @deposits.name_bank = params[:name_bank]
+      @deposits.total     = params[:total]
+      @deposits.user_id   = params[:user_id]
+      @deposits.status    = "menunggu-pembayaran"
+      if @deposits.save
+        render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
+      else
+        render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      deposits = Deposit.find(params[:deposit_id])
+      deposits.destroy!
+      render json: {success: true, msg:'Deposits has been deleted', data:deposits}, status: :ok
+    end
+
     private
     def deposit_params
       params.require(:deposit).permit(:name_bank,:unit_price,:quantity,:total,:date,:order, :user_id)
-    end
-
-    def check_status_kyc
-      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
-      end
     end
 
     def decoded_auth_token
@@ -57,9 +68,9 @@ module V1
 
     def authenticate_request
       if request.headers["JWT"]
-        @current_user = AuthorizeApiRequest.call(request.headers["JWT"]).result
+        @current_user = AuthAdminRequest.call(request.headers["JWT"]).result
       else
-        @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
+        @current_user = AuthAdminRequest.call(cookies[:JWT]).result
       end
   
       render json: { error: 'Not Authorized' }, status: 401 unless @current_user
@@ -67,4 +78,4 @@ module V1
 
   end
 end
-  
+    
