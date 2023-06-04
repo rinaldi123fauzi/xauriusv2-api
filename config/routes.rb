@@ -84,7 +84,7 @@ Rails.application.routes.draw do
       get '/'                                 => 'profiles#index'
       post 'update'                           => 'profiles#update'
       get 'detail'                            => 'profiles#show'
-      get 'address'                           => 'profiles#address'
+      get 'evm-address'                       => 'profiles#evm_address'
     end
 
     #Sells

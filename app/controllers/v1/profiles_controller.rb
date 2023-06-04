@@ -76,7 +76,7 @@ class V1::ProfilesController < ApplicationController
       end
     end
 
-    def address 
+    def evm_address 
       user_id = decoded_auth_token[:user_id]
 
       @profile = Profile.find_by_user_id(user_id)
