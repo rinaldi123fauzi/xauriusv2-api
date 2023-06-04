@@ -25,6 +25,6 @@ class Profile < ApplicationRecord
     has_one_attached :file_ktp
     has_one_attached :image
 
-    validates :npwp_number, uniqueness: true
-    validates :id_number, uniqueness: true
+    validates :npwp_number, uniqueness: true, allow_nil: true
+    validates :id_number, uniqueness: true, allow_nil: true
 end

@@ -1,5 +1,4 @@
-module V1
-  class ProfilesController < ApplicationController
+class V1::ProfilesController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
     # before_action :check_status_kyc
@@ -77,6 +76,42 @@ module V1
       end
     end
 
+    def evm_address 
+      user_id = decoded_auth_token[:user_id]
+
+      @profile = Profile.find_by_user_id(user_id)
+
+      if @profile.status_kyc == true
+
+        # Periksa terlebih dahulu apakah user ini sudah punya adress atau belum.
+        datas = BlockEthAddr.where(user_id: user_id)
+
+        if datas.count == 0
+
+          # periksa apakah masih ada address yang nganggur 
+          addrs = BlockEthAddr.where("user_id = 0 or user_id is null")
+
+          if addrs.count > 0
+            addr = BlockEthAddr.where("user_id = 0 or user_id is null").first 
+            addr.user_id = user_id
+            addr.save 
+          else  
+            # TODO: kirim email kepada admin untuk load address baru
+          end
+        end
+
+        # query 1x lagi dan pasti sudah ada address 
+        data = BlockEthAddr.where(user_id: user_id).first 
+
+        render json: {
+          success: true,
+          data: data.address
+        }
+      else  
+        app_fail_render("KYC belum disetujui")
+      end
+    end
+
     private
     def profile_params
       params.require(:profile).permit(:full_name,:phone_number,:address,:id_number,:npwp_number,:deposit,:user_id)
@@ -107,6 +142,5 @@ module V1
       render json: { error: 'Not Authorized' }, status: 401 unless @current_user
     end
 
-  end
 end
   
