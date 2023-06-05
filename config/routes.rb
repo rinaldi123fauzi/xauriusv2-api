@@ -158,10 +158,14 @@ Rails.application.routes.draw do
       post 'load-eth-address'            => 'blocks#load_eth_address'
     end
 
+    # Charts
     scope :charts do 
       get '/'          => 'charts#index'
       get 'last-price' => 'charts#last_price'
     end
+
+    # EvmNetwork
+    get 'evm-networks'                        => 'evm_networks#index'
 
     #Balances
     scope :balances do
