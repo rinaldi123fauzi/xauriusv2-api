@@ -58,19 +58,19 @@ class V1::ProfilesController < ApplicationController
         else 
           if @profile.errors
             render json: {
-              status: false,
+              success: false,
               msg: @profile.errors.to_json
             }
           else  
             render json: {
-              status: false,
+              success: false,
               msg: 'Unknown error'
             }
           end
         end
       else 
         render json: {
-          status: false,
+          success: false,
           msg: 'KYC tidak boleh di edit'
         }
       end

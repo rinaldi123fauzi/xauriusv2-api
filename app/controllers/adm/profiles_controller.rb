@@ -53,12 +53,12 @@ module Adm
       else 
         if @profile.errors
           render json: {
-            status: false,
+            success: false,
             msg: @profile.errors.to_json
           }
         else  
           render json: {
-            status: false,
+            success: false,
             msg: 'Unknown error'
           }
         end
@@ -98,12 +98,12 @@ module Adm
       else 
         if @profile.errors
           render json: {
-            status: false,
+            success: false,
             msg: @profile.errors.to_json
           }
         else  
           render json: {
-            status: false,
+            success: false,
             msg: 'Unknown error'
           }
         end

@@ -346,11 +346,16 @@ module Adm
         @decode = JsonWebToken.decode(cookies[:JWT])
         AuthAdmin.update(@decode[:user_id], {session_id: 0})
         cookies[:JWT] = ""
+        render json: {
+          success: true, 
+          msg:'logout success', 
+          }, status: :ok
+      else
+        render json: {
+          success: false, 
+          msg:'logout fail', 
+          }, status: :ok
       end
-      render json: {
-        status: 'Success', 
-        msg:'logout success', 
-        }, status: :ok
     end
 
     def app_fail_render(msg)
