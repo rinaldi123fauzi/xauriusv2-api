@@ -66,6 +66,7 @@ module Adm
     end
 
     def update
+      # TODO : notifikasi email
       @profile = Profile.find(params[:profile_id])
       @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
       @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
