@@ -25,16 +25,17 @@ class V1::ProfilesController < ApplicationController
 
       user_id = decoded_auth_token[:user_id]
 
-      @profile = Profile.find_by_user_id(user_id)
-
-      if @profile.status_kyc == false 
-
+      @checkProfile = Profile.where(user_id: user_id)
+      
+      # jika user tidak ditemukan
+      if @checkProfile.count == 0
         @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
         @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
         @profile.address       = params[:address] if params[:address] && params[:address] != ""
         @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
         @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
         @profile.country       = params[:country] if params[:country] && params[:country] != ""
+        @profile.user_id       = user_id
 
         if params[:file_npwp] && params[:file_npwp] != ""
           @profile.file_npwp = params[:file_npwp]
@@ -68,11 +69,58 @@ class V1::ProfilesController < ApplicationController
             }
           end
         end
-      else 
-        render json: {
-          success: false,
-          msg: 'KYC tidak boleh di edit'
-        }
+
+      # jika user ditemukan diprofile
+      else
+        @profile = Profile.find_by_user_id(user_id)
+
+        if @profile.status_kyc == false 
+
+          @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
+          @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
+          @profile.address       = params[:address] if params[:address] && params[:address] != ""
+          @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
+          @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
+          @profile.country       = params[:country] if params[:country] && params[:country] != ""
+
+          if params[:file_npwp] && params[:file_npwp] != ""
+            @profile.file_npwp = params[:file_npwp]
+          end
+
+          if params[:file_ktp] && params[:file_ktp] != ""
+            @profile.file_ktp = params[:file_ktp]
+          end
+
+          if params[:image] && params[:image] != ""
+            @profile.image = params[:image]
+          end
+
+          if @profile.save
+
+            render json: {
+              success: true, 
+              msg: 'Profiles is update', 
+              data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
+            }, status: :ok
+          else 
+            if @profile.errors
+              render json: {
+                success: false,
+                msg: @profile.errors.to_json
+              }
+            else  
+              render json: {
+                success: false,
+                msg: 'Unknown error'
+              }
+            end
+          end
+        else 
+          render json: {
+            success: false,
+            msg: 'KYC tidak boleh di edit'
+          }
+        end
       end
     end
 
