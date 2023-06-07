@@ -49,7 +49,7 @@ module V1
           @buys = Buy.new
           @buys.amount_xau = hitungXau.to_f
           @buys.amount_idr = params[:amount_idr]
-          @buys.price      = chart.cclose
+          @buys.price      = chart.present? ? chart.copen : 0
           @buys.user_id    = decoded_auth_token[:user_id]
           
           if @buys.save

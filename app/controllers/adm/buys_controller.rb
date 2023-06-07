@@ -50,7 +50,7 @@ module Adm
       @buys = Buy.find(params[:buy_id])
       @buys.amount_xau = params[:amount_xau]
       @buys.amount_idr = params[:amount_idr]
-      @buys.price      = chart.copen
+      @buys.price      = chart.present? ? chart.copen : 0
       @buys.user_id    = params[:user_id]
       
       if @buys.save
