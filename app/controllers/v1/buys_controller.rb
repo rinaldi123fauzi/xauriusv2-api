@@ -60,9 +60,9 @@ module V1
             # kita cari dulu xaurius user ini
             balance_xau = Balance.where(user_id: user_id, currency: 'XAU').first 
 
-            sum_xau = hitungXau.to_f + balance_xau.balance_value 
+            sum_xau = hitungXau.to_f + balance_xau.balance_xau 
 
-            balance_xau.balance_value = sum_xau
+            balance_xau.balance_xau = sum_xau
             balance_xau.save 
 
             # dapatkan balances user yang ter-update (XAU dan IDR)

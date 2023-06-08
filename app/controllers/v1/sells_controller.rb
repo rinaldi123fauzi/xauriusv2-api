@@ -24,38 +24,51 @@ module V1
 
     def create
       # Harga per satu XAU
-      harga_satu_xau = 1000000
+      harga_satu_xau = Chartprice.last.chartprice_sell.to_f
+      user_id = decoded_auth_token[:user_id]
 
-      balances = Balance.where(user_id: decoded_auth_token[:user_id])
+      balances = Balance.where(user_id: user_id, currency: 'XAU')
 
       if balances.count == 1
 
         balance = balances.first
 
         # cek balance
-        if balance.balance_xau.to_f >= params[:summary].to_f
+        if balance.balance_xau.to_f >= params[:amount_xau].to_f
 
-          # hitung balance_xau
-          sum = params[:summary].to_f * harga_satu_xau.to_f
-
-          # update balance_value
-          balance.balance_value = balance.balance_value + sum
-          balance.balance_xau = balance.balance_xau - params[:summary].to_f
-          balance.save
+          # hitung per harga satu XAU dan balance xau
+          hitungIdr = params[:amount_xau].to_f * harga_satu_xau
 
           # Tambah sell
           @sells = Sell.new
-          @sells.summary = params[:summary]
-          @sells.price = sum
-          @sells.user_id = decoded_auth_token[:user_id]
+          @sells.amount_xau = params[:amount_xau]
+          @sells.amount_idr = hitungIdr.to_f
+          @sells.price = harga_satu_xau
+          @sells.user_id = user_id
     
           if @sells.save
+
+            # update balance XAU
+            balance.balance_xau = balance.balance_xau - params[:amount_xau].to_f
+            balance.save
+
+            # kita cari dulu IDR user ini
+            balances_idr = Balance.where(user_id: user_id, currency: 'IDR').first
+            
+            sum_idr = balances_idr.balance_value + hitungIdr.to_f
+
+            balances_idr.balance_value = sum_idr
+            balances_idr.save
+
+            # dapatkan balances user yang ter-update (XAU dan IDR)
+            user_balances = Balance.where(user_id: user_id)
+            
             render json: {
               success: true, 
               msg:'Sells is saved', 
               data:{
                 sells: @sells,
-                balances: balance
+                balances: user_balances
               }
               }, status: :ok
           else
@@ -77,7 +90,7 @@ module V1
 
     private
     def sell_params
-      params.require(:sell).permit(:sell,:summary,:date,:price,:quantity,:status,:user_id)
+      params.require(:sell).permit(:sell,:amount_xau,:date,:price,:quantity,:status,:user_id)
     end
 
     def decoded_auth_token
