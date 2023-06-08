@@ -10,8 +10,15 @@
 #  updated_at    :datetime         not null
 #  balance_xau   :decimal(, )      default(0.0)
 #
+
+# TODO: hapus balance_xau
 class Balance < ApplicationRecord
   belongs_to :user
 
   validates :currency, inclusion: { in: %w(XAU IDR), allow_nil: true, message: "%{value} bukan currency yang benar" }
 end
+
+# ID user_id  currency balance_value
+# 1  1        XAU      12
+# 2  1        IDR      8000000
+# 3  2        XAU  

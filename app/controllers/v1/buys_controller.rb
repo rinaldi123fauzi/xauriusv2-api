@@ -24,54 +24,60 @@ module V1
 
     def create
       # Harga per satu XAU
-      harga_satu_xau = 1000000
+      # harga diambil dari Chartprice.chartprice_buy
+      harga_satu_xau = Chartprice.last.chartprice_buy.to_f
+
+      user_id = decoded_auth_token[:user_id]
 
       # Cari User ID yang exists
-      balances = Balance.where(user_id: decoded_auth_token[:user_id])
+      balances = Balance.where(user_id: user_id, currency: 'IDR')
       if balances.count == 1
 
-        # Cari nilai balance
+        # Cari nilai balance IDR pertama
         balance = balances.first
+
         if balance.balance_value >= params[:amount_idr].to_f
-          
+
           # hitung per harga satu XAU dan balance xau
           hitungXau = params[:amount_idr].to_f / harga_satu_xau
-          sum = hitungXau.to_f + balance.balance_xau
           
-          # Update Balance
-          balance.balance_value = balance.balance_value - params[:amount_idr].to_f
-          balance.balance_xau = sum
-          balance.save
-
-          chart = Chart.last
-
           # Tambah buy
-          @buys = Buy.new
-          @buys.amount_xau = hitungXau.to_f
-          @buys.amount_idr = params[:amount_idr]
-          @buys.price      = chart.present? ? chart.copen : 0
-          @buys.user_id    = decoded_auth_token[:user_id]
+          @buy = Buy.new
+          @buy.amount_xau = hitungXau.to_f
+          @buy.amount_idr = params[:amount_idr]
+          @buy.price      = harga_satu_xau
+          @buy.user_id    = user_id
           
-          if @buys.save
+          if @buy.save
+
+            # Update balance IDR
+            balance.balance_value = balance.balance_value - params[:amount_idr].to_f
+            balance.save 
+            
+            # kita cari dulu xaurius user ini
+            balance_xau = Balance.where(user_id: user_id, currency: 'XAU').first 
+
+            sum_xau = hitungXau.to_f + balance_xau.balance_value 
+
+            balance_xau.balance_value = sum_xau
+            balance_xau.save 
+
+            # dapatkan balances user yang ter-update (XAU dan IDR)
+            user_balances = Balance.where(user_id: user_id)
+
             render json: {
               success: true, 
               msg:'Buys is saved', 
               data:{
-                buys: @buys,
-                balance: balance
+                buy: @buy,
+                balances: user_balances
               }
             }, status: :ok
           else
-            render json: {success: false, msg:'Buys is not saved', data:@buys.errors}, status: :unprocessable_entity
+            render json: {success: false, msg:'Buys is not saved', data:@buy.errors}, status: :unprocessable_entity
           end
         else
-          render json: {
-            success: false, 
-            msg:'Balance anda tidak mencukupi', 
-            data:{
-              balance: balance
-            }
-          },status: :ok
+          render json: {success: false, msg:'Saldo IDR Anda tidak mencukupi'}, status: :ok
         end
       else
         render json: {success: false, msg:'User tidak ditemukan'}, status: :ok
