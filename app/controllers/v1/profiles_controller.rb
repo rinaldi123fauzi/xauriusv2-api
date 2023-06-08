@@ -1,7 +1,6 @@
 class V1::ProfilesController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    # before_action :check_status_kyc
 
     def index
       @profile = Profile.where(user_id: decoded_auth_token[:user_id])
@@ -25,7 +24,7 @@ class V1::ProfilesController < ApplicationController
 
       user_id = decoded_auth_token[:user_id]
 
-      @checkProfile = Profile.where(user_id: user_id)
+      @checkProfile = Profile.where(user_id: user_id, status_kyc: 'mengisi-data')
 
       # jika user tidak ditemukan
       if @checkProfile.count == 0
@@ -39,6 +38,7 @@ class V1::ProfilesController < ApplicationController
         @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
         @profile.country       = params[:country] if params[:country] && params[:country] != ""
         @profile.user_id       = user_id
+        @profile.status_kyc    = "review"
 
         if params[:file_npwp] && params[:file_npwp] != ""
           @profile.file_npwp = params[:file_npwp]
@@ -77,7 +77,7 @@ class V1::ProfilesController < ApplicationController
       else
         @profile = Profile.find_by_user_id(user_id)
 
-        if @profile.status_kyc == false 
+        if @profile.status_kyc == "mengisi-data" 
 
           @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
           @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
@@ -85,6 +85,7 @@ class V1::ProfilesController < ApplicationController
           @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
           @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
           @profile.country       = params[:country] if params[:country] && params[:country] != ""
+          @profile.status_kyc    = "review"
 
           if params[:file_npwp] && params[:file_npwp] != ""
             @profile.file_npwp = params[:file_npwp]
@@ -173,13 +174,6 @@ class V1::ProfilesController < ApplicationController
         @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
       else
         @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
-      end
-    end
-
-    def check_status_kyc
-      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
       end
     end
 

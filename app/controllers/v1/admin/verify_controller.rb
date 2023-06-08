@@ -56,8 +56,8 @@ module V1
         profiles = Profile.where(user_id: user_id)
         if profiles.count == 1
           profile = profiles.first
-          if profile.status_kyc == false
-            profile.status_kyc = true
+          if profile.status_kyc == "review"
+            profile.status_kyc = params[:status_kyc]
             if profile.save
 
               # INI PERLU DIMASUKKAN NANTI.

@@ -60,7 +60,7 @@ module V1
             # kita cari dulu xaurius user ini
             balance_xau = Balance.where(user_id: user_id, currency: 'XAU').first 
 
-            sum_xau = hitungXau.to_f + balance_xau.balance_xau 
+            sum_xau = hitungXau.to_f + balance_xau.balance_value 
 
             balance_xau.balance_value = sum_xau
             balance_xau.save 
@@ -94,8 +94,8 @@ module V1
 
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
+      unless profile.status_kyc == "approve"
+        render json: { error: 'Status KYC Anda harus Approve' }, status: 401
       end
     end
 

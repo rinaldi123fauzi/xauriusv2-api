@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_08_032850) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_08_140548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,7 +72,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_032850) do
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "balance_xau", default: "0.0"
     t.index ["user_id"], name: "index_balances_on_user_id"
   end
 
@@ -159,7 +158,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_032850) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
-    t.boolean "status_kyc", default: false
+    t.string "status_kyc", default: "false"
     t.string "country"
     t.string "file_npwp"
     t.string "file_ktp"
