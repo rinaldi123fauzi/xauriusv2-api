@@ -55,9 +55,7 @@ module V1
                     data: {
                       user: {
                         id: @orang.id,
-                        user_jwt_token: create_jwt_token(@orang),
-                        user_has_usaha: @orang.is_usaha,
-                        usaha_id: @usaha_id
+                        user_jwt_token: create_jwt_token(@orang)
                       }
                     }
                   }
@@ -392,7 +390,7 @@ module V1
       #MODIFIKASI
       @rand = rand(1111..9999)
 
-      payload = {:email => user_obj.email, :user_id => user_obj.id, :session_id => @rand, :role => user_obj.role}
+      payload = {:email => user_obj.email, :user_id => user_obj.id, :session_id => @rand}
       token = JsonWebToken.encode(payload)
       user_obj.update_column(:jwt_token, token)
       user_obj.update_column(:session_id, @rand)

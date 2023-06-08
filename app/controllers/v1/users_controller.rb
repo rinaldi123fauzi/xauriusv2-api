@@ -2,7 +2,7 @@ module V1
   class UsersController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    # before_action :check_status_kyc
+    before_action :check_status_kyc
 
     def index
       users = User.where(id: decoded_auth_token[:user_id])
@@ -15,10 +15,14 @@ module V1
 
     def show
       users = User.find(decoded_auth_token[:user_id])
+      profile = Profile.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: users
+        data: {
+          user: users,
+          status_kyc: profile.first.status_kyc
+        }
       }
     end
 

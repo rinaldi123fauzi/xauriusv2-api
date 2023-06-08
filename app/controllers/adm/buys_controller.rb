@@ -22,10 +22,13 @@ module Adm
     end
 
     def create
+      chart = Chart.last
+
       @buys = Buy.new
-      @buys.summary = hitungXau.to_f
-      @buys.price   = params[:price]
-      @buys.user_id = params[:user_id]
+      @buys.amount_xau = params[:amount_xau]
+      @buys.amount_idr = params[:amount_idr]
+      @buys.price      = chart.copen
+      @buys.user_id    = params[:user_id]
       
       if @buys.save
         render json: {
@@ -42,10 +45,13 @@ module Adm
     end
 
     def update
+      chart = Chart.last
+
       @buys = Buy.find(params[:buy_id])
-      @buys.summary = hitungXau.to_f
-      @buys.price   = params[:price]
-      @buys.user_id = params[:user_id]
+      @buys.amount_xau = params[:amount_xau]
+      @buys.amount_idr = params[:amount_idr]
+      @buys.price      = chart.present? ? chart.copen : 0
+      @buys.user_id    = params[:user_id]
       
       if @buys.save
         render json: {
@@ -69,7 +75,7 @@ module Adm
 
     private
     def buy_params
-      params.require(:buy).permit(:spend,:summary,:date,:price,:quantity,:status,:user_id)
+      params.require(:buy).permit(:spend,:amount_xau,:date,:price,:quantity,:status,:user_id)
     end
 
     def decoded_auth_token

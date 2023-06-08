@@ -26,11 +26,14 @@ class V1::ProfilesController < ApplicationController
       user_id = decoded_auth_token[:user_id]
 
       @checkProfile = Profile.where(user_id: user_id)
-      
+
       # jika user tidak ditemukan
       if @checkProfile.count == 0
         @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
+
+        # TODO gem phonelib
         @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
+        
         @profile.address       = params[:address] if params[:address] && params[:address] != ""
         @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
         @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""

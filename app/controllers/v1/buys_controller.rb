@@ -32,22 +32,25 @@ module V1
 
         # Cari nilai balance
         balance = balances.first
-        if balance.balance_value >= params[:price].to_f
+        if balance.balance_value >= params[:amount_idr].to_f
           
           # hitung per harga satu XAU dan balance xau
-          hitungXau = params[:price].to_f / harga_satu_xau
+          hitungXau = params[:amount_idr].to_f / harga_satu_xau
           sum = hitungXau.to_f + balance.balance_xau
           
           # Update Balance
-          balance.balance_value = balance.balance_value - params[:price].to_f
+          balance.balance_value = balance.balance_value - params[:amount_idr].to_f
           balance.balance_xau = sum
           balance.save
 
+          chart = Chart.last
+
           # Tambah buy
           @buys = Buy.new
-          @buys.summary = hitungXau.to_f
-          @buys.price = params[:price]
-          @buys.user_id = decoded_auth_token[:user_id]
+          @buys.amount_xau = hitungXau.to_f
+          @buys.amount_idr = params[:amount_idr]
+          @buys.price      = chart.present? ? chart.copen : 0
+          @buys.user_id    = decoded_auth_token[:user_id]
           
           if @buys.save
             render json: {
@@ -77,7 +80,7 @@ module V1
 
     private
     def buy_params
-      params.require(:buy).permit(:spend,:summary,:date,:price,:quantity,:status,:user_id)
+      params.require(:buy).permit(:spend,:amount_xau,:date,:amount_idr,:quantity,:status,:user_id)
     end
 
     def check_status_kyc
