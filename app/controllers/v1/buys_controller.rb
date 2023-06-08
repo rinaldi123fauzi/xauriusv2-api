@@ -62,7 +62,7 @@ module V1
 
             sum_xau = hitungXau.to_f + balance_xau.balance_xau 
 
-            balance_xau.balance_xau = sum_xau
+            balance_xau.balance_value = sum_xau
             balance_xau.save 
 
             # dapatkan balances user yang ter-update (XAU dan IDR)

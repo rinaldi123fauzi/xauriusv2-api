@@ -21,4 +21,5 @@ end
 # ID user_id  currency balance_value
 # 1  1        XAU      12
 # 2  1        IDR      8000000
-# 3  2        XAU  
+# 3  2        XAU      10
+# 4  2        IDR      7000000
