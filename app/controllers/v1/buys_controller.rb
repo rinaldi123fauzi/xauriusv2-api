@@ -29,6 +29,9 @@ module V1
 
       user_id = decoded_auth_token[:user_id]
 
+      # jalankan ini sebelum eksekusi kode kebawah
+      set_user_balances(user_id) 
+
       # Cari User ID yang exists
       balances = Balance.where(user_id: user_id, currency: 'IDR')
       if balances.count == 1
@@ -112,6 +115,28 @@ module V1
       end
   
       render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+    end
+
+    # kadang-kadang user belum mempunyai XAU dan IDR, jadi disini fungsinya untuk memeriksa saja
+    # jika belum ada, maka dibuatkan. Jika sudah ada, maka dibuarkan saja
+    def set_user_balances(user_id) 
+
+      if Balance.where(user_id: user_id, currency: 'XAU').count == 0
+        Balance.create({
+          user_id: user_id,
+          currency: 'XAU',
+          balance_value: 0
+        })
+      end
+
+      if Balance.where(user_id: user_id, currency: 'IDR').count == 0
+        Balance.create({
+          user_id: user_id,
+          currency: 'IDR',
+          balance_value: 0
+        })
+      end
+
     end
 
   end
