@@ -24,20 +24,17 @@ class V1::ProfilesController < ApplicationController
 
       user_id = decoded_auth_token[:user_id]
 
-      @checkProfile = Profile.where(user_id: user_id, status_kyc: 'mengisi-data')
+      @checkProfile = Profile.where('user_id = ? and status_kyc = ? or status_kyc = ?', user_id, 'fill', 'rejected')
 
-      # jika user tidak ditemukan
-      if @checkProfile.count == 0
+      # jika memenuhi status fill atau rejected
+      if @checkProfile.count == 1
+        @profile = @checkProfile.first
         @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
-
-        # TODO gem phonelib
         @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
-        
         @profile.address       = params[:address] if params[:address] && params[:address] != ""
         @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
         @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
         @profile.country       = params[:country] if params[:country] && params[:country] != ""
-        @profile.user_id       = user_id
         @profile.status_kyc    = "review"
 
         if params[:file_npwp] && params[:file_npwp] != ""
@@ -56,7 +53,7 @@ class V1::ProfilesController < ApplicationController
 
           render json: {
             success: true, 
-            msg: 'Profiles is update', 
+            msg: 'Mohon tunggu KYC Anda sedang kami review.', 
             data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
           }, status: :ok
         else 
@@ -72,57 +69,17 @@ class V1::ProfilesController < ApplicationController
             }
           end
         end
-
-      # jika user ditemukan diprofile
       else
-        @profile = Profile.find_by_user_id(user_id)
-
-        if @profile.status_kyc == "mengisi-data" 
-
-          @profile.full_name     = params[:full_name] if params[:full_name] && params[:full_name] != ""
-          @profile.phone_number  = params[:phone_number] if params[:phone_number] && params[:phone_number] != ""
-          @profile.address       = params[:address] if params[:address] && params[:address] != ""
-          @profile.id_number     = params[:id_number] if params[:id_number] && params[:id_number] != ""
-          @profile.npwp_number   = params[:npwp_number] if params[:npwp_number] && params[:npwp_number] != ""
-          @profile.country       = params[:country] if params[:country] && params[:country] != ""
-          @profile.status_kyc    = "review"
-
-          if params[:file_npwp] && params[:file_npwp] != ""
-            @profile.file_npwp = params[:file_npwp]
-          end
-
-          if params[:file_ktp] && params[:file_ktp] != ""
-            @profile.file_ktp = params[:file_ktp]
-          end
-
-          if params[:image] && params[:image] != ""
-            @profile.image = params[:image]
-          end
-
-          if @profile.save
-
-            render json: {
-              success: true, 
-              msg: 'Profiles is update', 
-              data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
-            }, status: :ok
-          else 
-            if @profile.errors
-              render json: {
-                success: false,
-                msg: @profile.errors.to_json
-              }
-            else  
-              render json: {
-                success: false,
-                msg: 'Unknown error'
-              }
-            end
-          end
-        else 
+        profile = Profile.where(user_id: user_id, status_kyc: 'approved')
+        if profile.count == 1
           render json: {
             success: false,
-            msg: 'KYC tidak boleh di edit'
+            msg: 'Maaf, Anda tidak dapat mengubah data diri.'
+          }
+        else
+          render json: {
+            success: false,
+            msg: 'Maaf, Anda tidak dapat mengubah data diri karena telah mengirimkan data KYC sebelumnya. Mohon menunggu update dari kami.'
           }
         end
       end

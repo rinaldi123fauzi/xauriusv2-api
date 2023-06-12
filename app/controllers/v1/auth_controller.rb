@@ -121,7 +121,7 @@ module V1
               Profile.create!(
                 {
                   user_id: @ora.id, 
-                  status_kyc: 'mengisi-data'
+                  status_kyc: 'fill'
                 }
               )
   

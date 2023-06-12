@@ -42,7 +42,7 @@ module V1
 
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      unless profile.status_kyc == "approve"
+      unless profile.status_kyc == "approved"
         render json: {
           success: false,
           status: 401,
