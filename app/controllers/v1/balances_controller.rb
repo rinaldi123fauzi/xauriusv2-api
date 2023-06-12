@@ -25,10 +25,12 @@ module V1
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
       unless profile.status_kyc == "approve"
-        render json: {
-          success: false,
-          msg: "Status KYC Anda harus Approve"
-        }
+        render json: { error: 'Status KYC Anda harus Approve' }, status: 401
+        # render json: {
+        #   success: false,
+        #   msg: "Status KYC Anda harus Approve",
+        #   data: @balances
+        # }
       end
     end
 
