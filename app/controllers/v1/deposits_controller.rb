@@ -43,7 +43,11 @@ module V1
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
       unless profile.status_kyc == "approve"
-        render json: { error: 'Status KYC Anda harus Approve' }, status: 401
+        render json: {
+          success: false,
+          status: 401,
+          msg: "Status KYC Anda harus Approve"
+        }
       end
     end
 
@@ -62,7 +66,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
   end

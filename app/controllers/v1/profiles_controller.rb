@@ -184,7 +184,11 @@ class V1::ProfilesController < ApplicationController
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
 end

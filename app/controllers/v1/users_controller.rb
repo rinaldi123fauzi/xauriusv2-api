@@ -8,7 +8,9 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: users
+        data: {
+          user: users
+        }
       }
     end
 
@@ -68,7 +70,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
   end
