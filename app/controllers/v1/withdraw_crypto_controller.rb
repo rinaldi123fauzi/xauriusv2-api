@@ -9,20 +9,16 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: {
-          withdraws: withdraws
-        }
+        data: withdraws
       }
     end
 
     def show
-      withdraws = WithdrawCrypto.find_by_user_id(decoded_auth_token[:user_id])
+      withdraws = WithdrawCrypto.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: {
-          withdraws: withdraws
-        }
+        data: withdraws
       }
     end
 

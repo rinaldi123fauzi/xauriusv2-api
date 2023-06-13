@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      deposits = Deposit.find_by_user_id(decoded_auth_token[:user_id])
+      deposits = Deposit.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",

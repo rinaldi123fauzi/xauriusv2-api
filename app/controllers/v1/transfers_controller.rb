@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      transfers = Transfer.find_by_user_id(decoded_auth_token[:user_id])
+      transfers = Transfer.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
