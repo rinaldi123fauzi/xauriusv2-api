@@ -61,6 +61,11 @@ Rails.application.routes.draw do
       delete 'delete'                         => 'deposits#destroy'
     end
 
+    #Deposit EVM (Token)
+    scope :evms do
+      get 'deposit'           => 'evms#deposit'
+    end
+
     #Profiles
     scope :profiles do
       get '/'                                 => 'profiles#index'
