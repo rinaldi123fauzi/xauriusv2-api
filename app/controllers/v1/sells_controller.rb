@@ -34,7 +34,7 @@ module V1
         balance = balances.first
 
         # cek balance
-        if balance.balance_xau.to_f >= params[:amount_xau].to_f
+        if balance.balance_value.to_f >= params[:amount_xau].to_f
 
           # hitung per harga satu XAU dan balance xau
           hitungIdr = params[:amount_xau].to_f * harga_satu_xau
@@ -49,7 +49,7 @@ module V1
           if @sells.save
 
             # update balance XAU
-            balance.balance_xau = balance.balance_xau - params[:amount_xau].to_f
+            balance.balance_value = balance.balance_value - params[:amount_xau].to_f
             balance.save
 
             # kita cari dulu IDR user ini
@@ -103,8 +103,12 @@ module V1
 
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
+      unless profile.status_kyc == "approved"
+        render json: {
+          success: false,
+          status: 401,
+          msg: "Status KYC Anda harus Approve"
+        }
       end
     end
 
@@ -115,7 +119,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
   end

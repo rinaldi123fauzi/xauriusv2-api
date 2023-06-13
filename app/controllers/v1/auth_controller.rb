@@ -118,7 +118,12 @@ module V1
             if @ora.save
 
               # setelah selesai register, harus buat satu ID di table profile
-              Profile.create({user_id: @ora.id})
+              Profile.create!(
+                {
+                  user_id: @ora.id, 
+                  status_kyc: 'fill'
+                }
+              )
   
               TheMailer.register(@ora).deliver_now
   

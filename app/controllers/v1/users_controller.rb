@@ -2,14 +2,15 @@ module V1
   class UsersController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    before_action :check_status_kyc
 
     def index
       users = User.where(id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: users
+        data: {
+          user: users
+        }
       }
     end
 
@@ -62,13 +63,6 @@ module V1
       end
     end
 
-    def check_status_kyc
-      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
-      end
-    end
-
     def authenticate_request
       if request.headers["JWT"]
         @current_user = AuthorizeApiRequest.call(request.headers["JWT"]).result
@@ -76,7 +70,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
   end

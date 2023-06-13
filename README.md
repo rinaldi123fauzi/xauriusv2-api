@@ -36,3 +36,11 @@ Things you may want to cover:
 - hapus controller yang tidak terpakai diluar
 
 - Perbaiki lagi response-response contoh yang ada di postman
+
+
+# TODO
+  # status_kyc
+  # mengisi-data, review, reject, approve
+
+  # withdraw_crypto
+  # object bukan list

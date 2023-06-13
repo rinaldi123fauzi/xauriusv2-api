@@ -56,8 +56,8 @@ module V1
         profiles = Profile.where(user_id: user_id)
         if profiles.count == 1
           profile = profiles.first
-          if profile.status_kyc == false
-            profile.status_kyc = true
+          if profile.status_kyc == "review"
+            profile.status_kyc = params[:status_kyc]
             if profile.save
 
               # INI PERLU DIMASUKKAN NANTI.
@@ -81,12 +81,16 @@ module V1
               end
 
               # semua respon langsung success
-              render json: {success: true, msg:'KYC Terverifikasi', data: ActiveModelSerializers::SerializableResource.new(profile, each_serializer: ProfileSerializer)}, status: :ok
+              if params[:status_kyc] == "approved"
+                render json: {success: true, msg:'Selamat! KYC Anda telah telah sukses', data: ActiveModelSerializers::SerializableResource.new(profile, each_serializer: ProfileSerializer)}, status: :ok
+              elsif params[:status_kyc] == "rejected"
+                render json: {success: true, msg:'Maaf! KYC Anda belum disetujui. Silakan coba lagi.', data: ActiveModelSerializers::SerializableResource.new(profile, each_serializer: ProfileSerializer)}, status: :ok
+              end
             else
               render json: {success: false, msg:'KYC gagal verifikasi', data: profile.error}, status: :ok
             end
           else
-            render json: {success: false, msg:'KYC Sudah Terverifikasi'}, status: :ok
+            render json: {success: false, msg:'KYC sudah verified'}, status: :ok
           end
         else
           render json: {success: false, msg:'Profile tidak ditemukan'}, status: :ok
@@ -139,13 +143,13 @@ module V1
         if withdraws.count == 1
           withdraw = withdraws.first
 
-          balances = Balance.where(user_id: withdraw.user_id)
+          balances = Balance.where(user_id: withdraw.user_id, currency: 'XAU')
 
           balance = balances.first
 
           # proses pengurangan balance
-          sum = balance.balance_xau - withdraw.xau_amount
-          balance.balance_xau = sum
+          sum = balance.balance_value - withdraw.xau_amount
+          balance.balance_value = sum
           balance.save
           
           # ubah status

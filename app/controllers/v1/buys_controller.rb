@@ -60,7 +60,7 @@ module V1
             # kita cari dulu xaurius user ini
             balance_xau = Balance.where(user_id: user_id, currency: 'XAU').first 
 
-            sum_xau = hitungXau.to_f + balance_xau.balance_xau 
+            sum_xau = hitungXau.to_f + balance_xau.balance_value 
 
             balance_xau.balance_value = sum_xau
             balance_xau.save 
@@ -94,8 +94,12 @@ module V1
 
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
+      unless profile.status_kyc == "approved"
+        render json: {
+          success: false,
+          status: 401,
+          msg: "Status KYC Anda harus Approve"
+        }
       end
     end
 
@@ -114,7 +118,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
     # kadang-kadang user belum mempunyai XAU dan IDR, jadi disini fungsinya untuk memeriksa saja

@@ -27,4 +27,5 @@ class Profile < ApplicationRecord
 
     validates :npwp_number, uniqueness: true, allow_nil: true
     validates :id_number, uniqueness: true, allow_nil: true
+    validates :status_kyc, inclusion: { in: %w(fill review rejected approved), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

@@ -9,7 +9,9 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: withdraws
+        data: {
+          withdraws: withdraws
+        }
       }
     end
 
@@ -18,12 +20,16 @@ module V1
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: withdraws
+        data: {
+          withdraws: withdraws
+        }
       }
     end
 
     def create
-      @checkBalances = Balance.find_by_user_id(decoded_auth_token[:user_id])
+      @balances = Balance.where(user_id: decoded_auth_token[:user_id], currency: 'XAU')
+
+      @balance = @balances.first
 
       @withdraws = WithdrawCrypto.new
       @withdraws.evm_network_id = params[:evm_network_id]
@@ -32,16 +38,16 @@ module V1
       @withdraws.status = "buat"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @checkBalances.balance_xau >= params[:xau_amount].to_f
+      if @balance.balance_value >= params[:xau_amount].to_f
         if @withdraws.save
           render json: {
-              success: true, 
-              msg:'Withdraws Crypto is saved', 
-              data:{
-                withdraw: @withdraws,
-                balance: @checkBalances
-              }
-            }, status: :ok
+            success: true, 
+            msg:'Withdraws Crypto is saved', 
+            data:{
+              withdraw: @withdraws,
+              balance: @balance
+            }
+          }, status: :ok
         else
           render json: {success: false, msg:'Withdraws Crypto is not saved', data:@withdraws.errors}, status: :unprocessable_entity
         end
@@ -49,7 +55,7 @@ module V1
         render json: {
           success: false, 
           msg:'Balances XAU tidak mencukupi'
-          }, status: :ok
+        }, status: :ok
       end
     end
 
@@ -65,8 +71,12 @@ module V1
 
     def check_status_kyc
       profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      if profile.status_kyc == false
-        render json: { error: 'Anda Harus KYC Terlebihdahulu' }, status: 401
+      unless profile.status_kyc == "approved"
+        render json: {
+          success: false,
+          status: 401,
+          msg: "Status KYC Anda harus Approve"
+        }
       end
     end
 
@@ -77,7 +87,11 @@ module V1
         @current_user = AuthorizeApiRequest.call(cookies[:JWT]).result
       end
   
-      render json: { error: 'Not Authorized' }, status: 401 unless @current_user
+      render json: {
+        success: false,
+        status: 401,
+        msg: "Anda harus login"
+      } unless @current_user
     end
 
   end
