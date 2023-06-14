@@ -8,7 +8,6 @@
 #  currency      :string
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
-#  balance_xau   :decimal(, )      default(0.0)
 #
 require "test_helper"
 
