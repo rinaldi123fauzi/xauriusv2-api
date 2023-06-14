@@ -234,8 +234,8 @@ Rails.application.routes.draw do
 
     #Deposit EVM (Token)
     scope :evms do
-      post 'erc20_deposit'  => 'evms#erc20_deposit'
-      post 'erc20_withdraw' => 'evms#erc20_withdraw'
+      post 'erc20-deposit'  => 'evms#erc20_deposit'
+      post 'erc20-withdraw' => 'evms#erc20_withdraw'
     end
 
     
