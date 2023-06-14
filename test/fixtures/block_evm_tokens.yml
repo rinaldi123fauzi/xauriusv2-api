@@ -1,0 +1,36 @@
+# == Schema Information
+#
+# Table name: block_evm_tokens
+#
+#  id                :bigint           not null, primary key
+#  chain_id          :bigint
+#  contract_address  :string
+#  contract_decimals :integer
+#  tracking          :boolean
+#  token_name        :string
+#  token_symbol      :string
+#  currency_id       :bigint
+#  wd_fee            :decimal(, )
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#
+
+one:
+  chain_id: 
+  contract_address: MyString
+  contract_decimals: 1
+  tracking: false
+  token_name: MyString
+  token_symbol: MyString
+  currency_id: 
+  wd_fee: 9.99
+
+two:
+  chain_id: 
+  contract_address: MyString
+  contract_decimals: 1
+  tracking: false
+  token_name: MyString
+  token_symbol: MyString
+  currency_id: 
+  wd_fee: 9.99

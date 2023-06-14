@@ -21,7 +21,6 @@
 #  pass_reset_token :string
 #  phone_valid      :boolean
 #  user_login_type  :string
-#  role             :string
 #
 class User < ApplicationRecord
     has_secure_password

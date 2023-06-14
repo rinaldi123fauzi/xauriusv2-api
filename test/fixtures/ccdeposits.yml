@@ -1,0 +1,36 @@
+# == Schema Information
+#
+# Table name: ccdeposits
+#
+#  id                           :bigint           not null, primary key
+#  user_id                      :bigint
+#  ccdeposit_amount             :decimal(, )
+#  ccdeposit_confirmation_count :bigint
+#  ccdeposit_data               :text
+#  ccdeposit_status             :string
+#  ccdeposit_txhash             :string
+#  ccurrency_symbol             :string
+#  evm_chain_id                 :bigint
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#
+
+one:
+  user_id: 
+  ccdeposit_amount: 9.99
+  ccdeposit_confirmation_count: 
+  ccdeposit_data: MyText
+  ccdeposit_status: MyString
+  ccdeposit_txhash: MyString
+  ccurrency_symbol: MyString
+  evm_chain_id: 
+
+two:
+  user_id: 
+  ccdeposit_amount: 9.99
+  ccdeposit_confirmation_count: 
+  ccdeposit_data: MyText
+  ccdeposit_status: MyString
+  ccdeposit_txhash: MyString
+  ccurrency_symbol: MyString
+  evm_chain_id: 

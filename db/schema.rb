@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_08_140548) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_140548) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "block_evm_tokens", force: :cascade do |t|
+    t.bigint "chain_id"
+    t.string "contract_address"
+    t.integer "contract_decimals"
+    t.boolean "tracking"
+    t.string "token_name"
+    t.string "token_symbol"
+    t.bigint "currency_id"
+    t.decimal "wd_fee"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "businesses", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "nama_usaha"
@@ -106,6 +119,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_08_140548) do
     t.bigint "user_id", null: false
     t.decimal "amount_idr"
     t.index ["user_id"], name: "index_buys_on_user_id"
+  end
+
+  create_table "ccdeposits", force: :cascade do |t|
+    t.bigint "user_id"
+    t.decimal "ccdeposit_amount"
+    t.bigint "ccdeposit_confirmation_count"
+    t.text "ccdeposit_data"
+    t.string "ccdeposit_status"
+    t.string "ccdeposit_txhash"
+    t.string "ccurrency_symbol"
+    t.bigint "evm_chain_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "chartprices", force: :cascade do |t|

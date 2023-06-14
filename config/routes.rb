@@ -61,6 +61,8 @@ Rails.application.routes.draw do
       delete 'delete'                         => 'deposits#destroy'
     end
 
+    
+
     #Profiles
     scope :profiles do
       get '/'                                 => 'profiles#index'
@@ -228,6 +230,12 @@ Rails.application.routes.draw do
       get '/'                                 => 'users#index'
       get 'detail'                            => 'users#show'
       delete 'delete'                         => 'users#destroy'
+    end
+
+    #Deposit EVM (Token)
+    scope :evms do
+      post 'erc20_deposit'  => 'evms#erc20_deposit'
+      post 'erc20_withdraw' => 'evms#erc20_withdraw'
     end
 
     
