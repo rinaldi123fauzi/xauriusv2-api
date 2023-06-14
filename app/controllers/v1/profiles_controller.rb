@@ -90,7 +90,7 @@ class V1::ProfilesController < ApplicationController
 
       @profile = Profile.find_by_user_id(user_id)
 
-      if @profile.status_kyc == true
+      if @profile.status_kyc == "approved"
 
         # Periksa terlebih dahulu apakah user ini sudah punya adress atau belum.
         datas = BlockEthAddr.where(user_id: user_id)
