@@ -365,17 +365,34 @@ module V1
     def destroy
       if cookies[:JWT].present? 
         @decode = JsonWebToken.decode(cookies[:JWT])
-        User.update(@decode[:user_id], {session_id: 0})
-        cookies[:JWT] = ""
-        render json: {
-          success: true, 
-          msg:'logout success', 
-          }, status: :ok
+        begin
+          User.update(@decode[:user_id], {session_id: 0})
+          cookies[:JWT] = ""
+          render json: {
+            success: true, 
+            msg:'logout success', 
+            }, status: :ok
+        rescue
+          render json: {
+            success: false, 
+            msg:'data tidak ditemukan', 
+            }, status: :ok
+        end
       else
-        render json: {
-          success: false , 
-          msg:'logout gagal', 
-          }, status: :ok
+        @decode = JsonWebToken.decode(request.headers["JWT"])
+        begin
+          User.update(@decode[:user_id], {session_id: 0})
+          request.headers["JWT"] = ""
+          render json: {
+            success: true, 
+            msg:'logout success', 
+            }, status: :ok
+        rescue
+          render json: {
+            success: false, 
+            msg:'data tidak ditemukan', 
+            }, status: :ok
+        end
       end
     end
 
