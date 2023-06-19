@@ -6,6 +6,13 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 
+Oadm.create_with({
+  oadm_email: "super@email.com",
+  oadm_name: "Super Admin",
+  oadm_password: "$2a$12$6Mn0PDslbrc7YquS0fEYVu23YfGt18qwXvN5xwhYOD8KJbpAJPvQ.",
+  oadm_status: "active"
+}).find_or_create_by!(oadm_email: "super@email.com")
+
 User.create_with({
     username: "superadmin",
     password: "123456",

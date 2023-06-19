@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: oadmrights
+#
+#  id                   :bigint           not null, primary key
+#  oadm_id              :bigint
+#  oadmright_controller :string
+#  oadmright_action     :string
+#  oadmright_note       :string
+#  oadmright_tf         :boolean
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#
+
+one:
+  oadm_id: 
+  oadmright_controller: MyString
+  oadmright_action: MyString
+  oadmright_note: MyString
+  oadmright_tf: false
+
+two:
+  oadm_id: 
+  oadmright_controller: MyString
+  oadmright_action: MyString
+  oadmright_note: MyString
+  oadmright_tf: false

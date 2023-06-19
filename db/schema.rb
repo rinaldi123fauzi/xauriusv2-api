@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_14_134807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -171,6 +171,30 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
     t.integer "chain_id"
     t.string "currency_symbol"
     t.text "explorer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "oadmrights", force: :cascade do |t|
+    t.bigint "oadm_id"
+    t.string "oadmright_controller"
+    t.string "oadmright_action"
+    t.string "oadmright_note"
+    t.boolean "oadmright_tf"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "oadms", force: :cascade do |t|
+    t.string "oadm_email"
+    t.string "oadm_name"
+    t.string "oadm_password"
+    t.integer "oadm_passchange_token"
+    t.string "oadm_photo"
+    t.string "oadm_status"
+    t.string "google_secret"
+    t.string "reset_google_secret_token"
+    t.string "two_factor_is_active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

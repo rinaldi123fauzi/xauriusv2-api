@@ -11,7 +11,7 @@
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
 #  user_id      :bigint           not null
-#  status_kyc   :boolean          default(FALSE)
+#  status_kyc   :string           default("false")
 #  country      :string
 #  file_npwp    :string
 #  file_ktp     :string
@@ -59,6 +59,4 @@ class ProfileSerializer < ActiveModel::Serializer
       "#{ENV['DOMAIN_API']}/images/default-image.png"
     end
   end
-    
-  
 end
