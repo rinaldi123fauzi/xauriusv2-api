@@ -8,22 +8,16 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: {
-          user: users
-        }
+        data: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserSerializer)
       }
     end
 
     def show
       users = User.find(decoded_auth_token[:user_id])
-      profile = Profile.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: {
-          user: users,
-          status_kyc: profile.first.status_kyc
-        }
+        data: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserSerializer)
       }
     end
 
