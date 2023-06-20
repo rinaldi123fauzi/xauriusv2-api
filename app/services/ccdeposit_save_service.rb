@@ -37,7 +37,6 @@ class CcdepositSaveService < ApplicationService
       saldo_obj.balance_value = saldo_sesudah 
       saldo_obj.save 
 
-
       return {success: true}
     else  
       return {success: false, msg: 'Fail. Recorded already'}
