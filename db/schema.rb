@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_20_132628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -73,6 +73,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_balances_on_user_id"
+  end
+
+  create_table "bank_users", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "nama_akun"
+    t.string "nama_bank"
+    t.string "nomor_rekening"
+    t.boolean "status", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bank_users_on_user_id"
   end
 
   create_table "banks", force: :cascade do |t|
@@ -267,6 +278,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_13_132238) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "balances", "users"
+  add_foreign_key "bank_users", "users"
   add_foreign_key "businesses", "users"
   add_foreign_key "buys", "users"
   add_foreign_key "deposits", "users"
