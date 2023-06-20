@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post 'forgot-password'                  => 'auth#forgot_password'
 
       post 'change-password'                  => 'auth#change_password'
-      delete 'logout'                         => 'auth#destroy'
+      post 'logout'                         => 'auth#destroy'
     end
 
     #Banks
@@ -149,7 +149,7 @@ Rails.application.routes.draw do
       post 'forgot-password'                  => 'auth#forgot_password'
 
       post 'change-password'                  => 'auth#change_password'
-      delete 'logout'                         => 'auth#destroy'
+      post 'logout'                         => 'auth#destroy'
     end
 
     scope :blocks do 
