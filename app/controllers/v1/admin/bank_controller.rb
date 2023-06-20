@@ -61,7 +61,7 @@ module V1
         else
           render json: {
             success: false,
-            msg: "Data barhasil dihapus.",
+            msg: "Data gagal dihapus.",
             data: bank.errors
           }
         end

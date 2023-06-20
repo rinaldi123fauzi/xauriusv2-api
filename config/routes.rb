@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :bank_users
   resources :auth_admins
   resources :evm_networks
   resources :banks
@@ -22,7 +23,7 @@ Rails.application.routes.draw do
       post 'forgot-password'                  => 'auth#forgot_password'
 
       post 'change-password'                  => 'auth#change_password'
-      post 'signout'                          => 'auth#destroy'
+      post 'logout'                         => 'auth#destroy'
     end
 
     #Banks
@@ -149,7 +150,7 @@ Rails.application.routes.draw do
       post 'forgot-password'                  => 'auth#forgot_password'
 
       post 'change-password'                  => 'auth#change_password'
-      post 'signout'                          => 'auth#destroy'
+      post 'logout'                         => 'auth#destroy'
     end
 
     scope :blocks do 
@@ -164,6 +165,13 @@ Rails.application.routes.draw do
     scope :charts do 
       get '/'          => 'charts#index'
       get 'last-price' => 'charts#last_price'
+    end
+
+    # Bank Users
+    scope :bank_users do 
+      get 'detail'     => 'bank_users#detail'
+      post 'create'    => 'bank_users#create'
+      put 'update'     => 'bank_users#update'
     end
 
     # EvmNetwork

@@ -342,19 +342,22 @@ module Adm
     end
 
     def destroy
-      if cookies[:JWT].present? 
-        @decode = JsonWebToken.decode(cookies[:JWT])
-        AuthAdmin.update(@decode[:user_id], {session_id: 0})
-        cookies[:JWT] = ""
-        render json: {
-          success: true, 
-          msg:'logout success', 
-          }, status: :ok
-      else
-        render json: {
-          success: false, 
-          msg:'logout fail', 
-          }, status: :ok
+      if params[:JWT].present? && params[:JWT] != ""
+        @decode = JsonWebToken.decode(params[:JWT])
+        begin
+          AuthAdmin.update(@decode[:user_id], {session_id: 0, jwt_token: ''})
+          cookies[:JWT] = ""
+          request.headers["JWT"] = ""
+          render json: {
+            success: true, 
+            msg:'logout success', 
+            }, status: :ok
+        rescue
+          render json: {
+            success: true, 
+            msg:'data tidak ditemukan', 
+            }, status: :ok
+        end
       end
     end
 
