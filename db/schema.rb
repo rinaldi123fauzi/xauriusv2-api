@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_20_132628) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_132628) do
     t.string "name_bank"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name_account"
+    t.string "number_rekening"
   end
 
   create_table "block_eth_addrs", force: :cascade do |t|

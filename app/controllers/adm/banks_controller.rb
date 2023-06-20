@@ -23,7 +23,9 @@ module Adm
 
     def create
       @buys = Bank.new
-      @buys.name_bank = params[:name_bank]
+      @buys.name_bank      = params[:name_bank]
+      bank.name_account    = params[:name_account]
+      bank.number_rekening = params[:number_rekening]
       
       if @buys.save
         render json: {
@@ -41,8 +43,10 @@ module Adm
 
     def update
       @buys = Bank.find(params[:bank_id])
-      @buys.name_bank = params[:name_bank]
-      
+      @buys.name_bank      = params[:name_bank]
+      bank.name_account    = params[:name_account]
+      bank.number_rekening = params[:number_rekening]
+
       if @buys.save
         render json: {
           success: true, 
