@@ -18,7 +18,6 @@
 #  image        :string
 #
 
-# TODO: Buat status KYC
 class Profile < ApplicationRecord
     belongs_to :user
     has_one_attached :file_npwp

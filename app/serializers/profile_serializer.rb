@@ -59,6 +59,4 @@ class ProfileSerializer < ActiveModel::Serializer
       "#{ENV['DOMAIN_API']}/images/default-image.png"
     end
   end
-    
-  
 end
