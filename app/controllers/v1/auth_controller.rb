@@ -363,18 +363,26 @@ module V1
     end
 
     def destroy
-      if cookies[:JWT].present? 
-        @decode = JsonWebToken.decode(cookies[:JWT])
-        User.update(@decode[:user_id], {session_id: 0})
-        cookies[:JWT] = ""
-        render json: {
-          success: true, 
-          msg:'logout success', 
-          }, status: :ok
+      if params[:JWT].present? && params[:JWT] != ""
+        @decode = JsonWebToken.decode(params[:JWT])
+        begin
+          User.update(@decode[:user_id], {session_id: 0, jwt_token: ''})
+          cookies[:JWT] = ""
+          request.headers["JWT"] = ""
+          render json: {
+            success: true, 
+            msg:'logout success', 
+            }, status: :ok
+        rescue
+          render json: {
+            success: false, 
+            msg:'data tidak ditemukan', 
+            }, status: :ok
+        end
       else
         render json: {
-          success: false , 
-          msg:'logout gagal', 
+          success: false, 
+          msg:'parameter JWT harus diisi', 
           }, status: :ok
       end
     end

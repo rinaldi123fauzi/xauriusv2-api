@@ -29,7 +29,7 @@ module V1
           # balance awal 
           balance_awal = balance_obj.balance_value
 
-          balance_after = balance_awal + deposit.total
+          balance_after = balance_awal.to_f + deposit.total.to_f
 
           balance_obj.balance_value = balance_after
           balance_obj.save 

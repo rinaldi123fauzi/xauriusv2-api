@@ -44,3 +44,17 @@ Things you may want to cover:
 
   # withdraw_crypto
   # object bukan list
+
+<!-- catatan bank user -->
+  # bank (akun perusahaan)
+  # nama_bank
+  #  nama_akun
+  #  nomor_rekening
+
+
+  #  bank_user
+  #  user_id
+  #  status: true / false
+  #  nama_akun
+  #  nama_bank
+  #  nomor_rekening
