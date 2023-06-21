@@ -44,7 +44,7 @@ module V1
     end
 
     def update
-      check_bank = BankUser.where(user_id: decoded_auth_token[:user_id])
+      check_bank = BankUser.where(user_id: decoded_auth_token[:user_id], status: false)
       if check_bank.count == 1
         bank_user = check_bank.first
         bank_user.nama_akun      = params[:nama_akun]
