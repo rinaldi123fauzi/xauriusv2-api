@@ -42,7 +42,7 @@ module V1
             msg: 'Deposits is verified', 
             data: {
               balance: balance_obj,
-              deposit: deposit
+              deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
             }
           }, status: :ok
 
