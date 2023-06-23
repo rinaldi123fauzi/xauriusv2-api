@@ -169,6 +169,26 @@ module V1
         end
       end
 
+      # Lock / Unlock Bank Users
+      def bankUser
+        bank_users = BankUser.where(id: params[:bank_user_id])
+        bank_user = bank_users.first
+        bank_user.status = params[:status]
+        if bank_user.save
+          render json:{
+            success: true,
+            msg: "Status bank users is saved",
+            data: bank_users
+          }
+        else
+          render json:{
+            success: false,
+            msg: "Status bank user is not save",
+            data: bank_user.errors
+          }
+        end
+      end
+
       private
       def decoded_auth_token
         if request.headers["JWT"]

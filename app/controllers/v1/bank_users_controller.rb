@@ -44,7 +44,7 @@ module V1
     end
 
     def update
-      check_bank = BankUser.where(user_id: decoded_auth_token[:user_id], status: false)
+      check_bank = BankUser.where(user_id: decoded_auth_token[:user_id], status: "unlock")
       if check_bank.count == 1
         bank_user = check_bank.first
         bank_user.nama_akun      = params[:nama_akun]
@@ -67,7 +67,7 @@ module V1
       else
         render json: {
           success: false,
-          msg: "Data bank user tidak tersedia.",
+          msg: "Data bank mungkin sudah dilock.",
         }
       end
     end

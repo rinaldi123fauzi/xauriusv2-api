@@ -24,6 +24,7 @@ module V1
 
     def create
       @checkBalances = Balance.where(user_id: decoded_auth_token[:user_id], currency: 'IDR')
+      @balance = @checkBalances.first
 
       @withdraws = Withdraw.new
       @withdraws.bank_id = params[:bank_id]
@@ -33,7 +34,7 @@ module V1
       @withdraws.status = "sedang-diproses"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @checkBalances.balance_value >= params[:ammount].to_f
+      if @balance.balance_value >= params[:ammount].to_f
         if @withdraws.save
           render json: {
               success: true, 

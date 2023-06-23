@@ -129,6 +129,7 @@ Rails.application.routes.draw do
         post 'approve-kyc'                    => 'verify#approve_kyc'
         post 'approve-withdraw'               => 'verify#approve_withdraw'
         post 'approve-withdraw-crypto'        => 'verify#approve_withdraw_crypto'
+        post 'lock-unlock-bankuser'           => 'verify#bankUser'
       end
 
       #Bank
