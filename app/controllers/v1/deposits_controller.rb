@@ -9,7 +9,7 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: deposits
+        data: ActiveModelSerializers::SerializableResource.new(deposits, each_serializer: DepositSerializer)
       }
     end
 
@@ -18,7 +18,7 @@ module V1
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: deposits
+        data: ActiveModelSerializers::SerializableResource.new(deposits, each_serializer: DepositSerializer)
       }
     end
 
@@ -28,8 +28,14 @@ module V1
       @deposits.total     = params[:total]
       @deposits.user_id   = decoded_auth_token[:user_id]
       @deposits.status    = "menunggu-pembayaran"
+      if params[:file_deposit] && params[:file_deposit] != ""
+        @deposits.file_deposit = params[:file_deposit]
+      end
       if @deposits.save
-        render json: {success: true, msg:'Deposits is saved', data:@deposits}, status: :ok
+        render json: {
+          success: true, 
+          msg:'Deposits is saved', 
+          data: ActiveModelSerializers::SerializableResource.new(@deposits, each_serializer: DepositSerializer)}, status: :ok
       else
         render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
       end
