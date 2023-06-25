@@ -42,7 +42,7 @@ module V1
             msg: 'Deposits is verified', 
             data: {
               balance: balance_obj,
-              deposit: deposit
+              deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
             }
           }, status: :ok
 
@@ -166,6 +166,26 @@ module V1
             }, status: :ok
         else
           render json: {success: false, msg: 'Mungkin status sudah selesai'}, status: :ok
+        end
+      end
+
+      # Lock / Unlock Bank Users
+      def bankUser
+        bank_users = BankUser.where(id: params[:bank_user_id])
+        bank_user = bank_users.first
+        bank_user.status = params[:status]
+        if bank_user.save
+          render json:{
+            success: true,
+            msg: "Status bank users is saved",
+            data: bank_users
+          }
+        else
+          render json:{
+            success: false,
+            msg: "Status bank user is not save",
+            data: bank_user.errors
+          }
         end
       end
 
