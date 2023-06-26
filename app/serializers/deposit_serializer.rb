@@ -3,7 +3,6 @@
 # Table name: deposits
 #
 #  id           :bigint           not null, primary key
-#  name_bank    :string
 #  total        :decimal(, )
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
