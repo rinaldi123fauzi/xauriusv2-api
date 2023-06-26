@@ -10,12 +10,14 @@
 #  status       :string
 #  user_id      :bigint           not null
 #  file_deposit :string
+#  bank_id      :bigint           not null
 #
 
 # TODO
 # buat column status yang nanti isinya create, waiting-fo-payment, expire, complete
 class Deposit < ApplicationRecord
     belongs_to :user
+    belongs_to :bank
     has_one_attached :file_deposit
 
     validates :status, inclusion: { in: %w(menunggu-pembayaran kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }

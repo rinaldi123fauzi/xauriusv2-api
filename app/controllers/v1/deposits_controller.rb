@@ -24,7 +24,7 @@ module V1
 
     def create
       @deposits = Deposit.new
-      @deposits.name_bank = params[:name_bank]
+      @deposits.bank_id = params[:bank_id]
       @deposits.total     = params[:total]
       @deposits.user_id   = decoded_auth_token[:user_id]
       @deposits.status    = "menunggu-pembayaran"

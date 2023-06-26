@@ -175,6 +175,11 @@ Rails.application.routes.draw do
       put 'update'     => 'bank_users#update'
     end
 
+    # Bank
+    scope :bank do 
+      get '/'     => 'bank#index'
+    end
+
     # EvmNetwork
     get 'evm-networks'                        => 'evm_networks#index'
 

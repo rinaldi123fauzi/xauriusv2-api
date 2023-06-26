@@ -4,37 +4,34 @@ module Adm
     before_action :authenticate_request
 
     def index
-      buys = Bank.all
+      bank = Bank.all
       render json: {
         success: true,
         msg: "Data barhasil diambil.",
-        data: buys
+        data: bank
       }
     end
 
     def show
-      buys = Bank.find(params[:bank_id])
+      bank = Bank.where(id: params[:bank_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
-        data: buys
+        data: bank
       }
     end
 
     def create
-      @buys = Bank.new
-      @buys.name_bank      = params[:name_bank]
+      bank = Bank.new
+      bank.name_bank       = params[:name_bank]
       bank.name_account    = params[:name_account]
       bank.number_rekening = params[:number_rekening]
       
-      if @buys.save
+      if bank.save
         render json: {
           success: true, 
           msg:'Banks is saved', 
-          data:{
-            buys: @buys,
-            balance: balance
-          }
+          data: bank
         }, status: :ok
       else
         render json: {success: false, msg:'Banks is not saved', data:@buys.errors}, status: :unprocessable_entity
@@ -42,19 +39,16 @@ module Adm
     end
 
     def update
-      @buys = Bank.find(params[:bank_id])
-      @buys.name_bank      = params[:name_bank]
+      bank = Bank.find(params[:bank_id])
+      bank.name_bank       = params[:name_bank]
       bank.name_account    = params[:name_account]
       bank.number_rekening = params[:number_rekening]
 
-      if @buys.save
+      if bank.save
         render json: {
           success: true, 
           msg:'Banks is saved', 
-          data:{
-            buys: @buys,
-            balance: balance
-          }
+          data: bank
         }, status: :ok
       else
         render json: {success: false, msg:'Banks is not saved', data:@buys.errors}, status: :unprocessable_entity
@@ -62,9 +56,9 @@ module Adm
     end
 
     def destroy
-      buys = Bank.find(params[:bank_id])
-      buys.destroy!
-      render json: {success: true, msg:'Banks has been deleted', data:buys}, status: :ok
+      bank = Bank.find(params[:bank_id])
+      bank.destroy!
+      render json: {success: true, msg:'Banks has been deleted', data:bank}, status: :ok
     end
 
     private
