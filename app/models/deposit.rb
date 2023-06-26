@@ -3,7 +3,6 @@
 # Table name: deposits
 #
 #  id           :bigint           not null, primary key
-#  name_bank    :string
 #  total        :decimal(, )
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -17,8 +16,8 @@
 # buat column status yang nanti isinya create, waiting-fo-payment, expire, complete
 class Deposit < ApplicationRecord
     belongs_to :user
-    belongs_to :bank
+    belongs_to :bank, optional: true
     has_one_attached :file_deposit
 
-    validates :status, inclusion: { in: %w(menunggu-pembayaran kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }
+    validates :status, inclusion: { in: %w(create-file file-upload kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

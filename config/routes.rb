@@ -200,6 +200,7 @@ Rails.application.routes.draw do
       get '/'                                 => 'deposits#index'
       post 'create'                           => 'deposits#create'
       get 'detail'                            => 'deposits#show'
+      post 'upload-file'                      => 'deposits#uploadDeposit'
     end
 
     #Profiles

@@ -6,45 +6,62 @@ module V1
       # KHUSUS UNTUK DEVELOPMENT SAJA 
       def approve_deposit 
         deposit_id = params[:deposit_id]
+        status = params[:status]
 
-        # cari deposit ID yang sedang menunggu-pembayaran
-        deposits = Deposit.where(id: deposit_id, status: 'menunggu-pembayaran')
+        # cari deposit ID yang sedang file-upload
+        deposits = Deposit.where(id: deposit_id, status: 'file-upload')
 
         if deposits.count == 1 
           # kode lanjut 
-          deposit = deposits.first 
-
-          balances = Balance.where(user_id: deposit.user_id, currency: 'IDR')
-
-          if balances.count == 0
-            Balance.create({
-              user_id: deposit.user_id,
-              currency: 'IDR',
-              balance_value: 0
-            })
+          if status == "terbayar"
+            deposit = deposits.first 
+  
+            balances = Balance.where(user_id: deposit.user_id, currency: 'IDR')
+  
+            if balances.count == 0
+              Balance.create({
+                user_id: deposit.user_id,
+                currency: 'IDR',
+                balance_value: 0
+              })
+            end
+  
+            balance_obj = Balance.where(user_id: deposit.user_id, currency: 'IDR').first 
+  
+            # balance awal 
+            balance_awal = balance_obj.balance_value
+  
+            balance_after = balance_awal.to_f + deposit.total.to_f
+  
+            balance_obj.balance_value = balance_after
+            balance_obj.save 
+  
+            deposit.status = status
+            deposit.save 
+  
+            render json: {
+              success: true, 
+              msg: 'Deposits is verified', 
+              data: {
+                balance: balance_obj,
+                deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
+              }
+            }, status: :ok
+          elsif status == "create-file"
+            deposit.status = status
+            deposit.save 
+  
+            render json: {
+              success: true, 
+              msg: 'Deposits is pending', 
+              data: {
+                balance: balance_obj,
+                deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
+              }
+            }, status: :ok
+          else
+            render json: {success: false, msg: 'Status wajib diisi'}, status: :ok 
           end
-
-          balance_obj = Balance.where(user_id: deposit.user_id, currency: 'IDR').first 
-
-          # balance awal 
-          balance_awal = balance_obj.balance_value
-
-          balance_after = balance_awal.to_f + deposit.total.to_f
-
-          balance_obj.balance_value = balance_after
-          balance_obj.save 
-
-          deposit.status = 'terbayar'
-          deposit.save 
-
-          render json: {
-            success: true, 
-            msg: 'Deposits is verified', 
-            data: {
-              balance: balance_obj,
-              deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
-            }
-          }, status: :ok
 
         else  
           render json: {success: false, msg: 'Mungkin status sudah terbayar'}, status: :ok
