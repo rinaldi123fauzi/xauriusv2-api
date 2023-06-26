@@ -22,15 +22,32 @@ module V1
       }
     end
 
+    def uploadDeposit
+      @deposits = Deposit.where(user_id: decoded_auth_token[:user_id], status: 'create-file')
+      @deposit = @deposits.first
+
+      if @deposits.count == 1
+        @deposit.file_deposit = params[:file_deposit]
+        @deposit.status       = "file-upload" 
+        if @deposit.save
+          render json: {
+            success: true, 
+            msg:'Deposits is saved', 
+            data: ActiveModelSerializers::SerializableResource.new(@deposit, each_serializer: DepositSerializer)}, status: :ok
+        else
+          render json: {success: false, msg:'Deposits is not saved', data:@deposit.errors}, status: :unprocessable_entity
+        end
+      else
+        render json: {success: false, msg:'Mungkin status sudah terbayar'}, status: :unprocessable_entity
+      end
+    end
+
     def create
       @deposits = Deposit.new
       @deposits.bank_id = params[:bank_id]
       @deposits.total     = params[:total]
       @deposits.user_id   = decoded_auth_token[:user_id]
-      @deposits.status    = "menunggu-pembayaran"
-      if params[:file_deposit] && params[:file_deposit] != ""
-        @deposits.file_deposit = params[:file_deposit]
-      end
+      @deposits.status    = "create-file"
       if @deposits.save
         render json: {
           success: true, 

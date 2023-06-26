@@ -19,5 +19,5 @@ class Deposit < ApplicationRecord
     belongs_to :bank, optional: true
     has_one_attached :file_deposit
 
-    validates :status, inclusion: { in: %w(menunggu-pembayaran kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }
+    validates :status, inclusion: { in: %w(create-file file-upload kadaluarsa terbayar), allow_nil: true, message: "%{value} bukan status yang benar" }
 end

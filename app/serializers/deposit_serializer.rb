@@ -25,7 +25,7 @@ class DepositSerializer < ActiveModel::Serializer
     if self.object.file_deposit.attached? 
       ENV['DOMAIN_API'] + Rails.application.routes.url_helpers.rails_blob_url(self.object.file_deposit, only_path: true) 
     else  
-      "#{ENV['DOMAIN_API']}/images/default-deposit.png"
+      nil
     end
   end
 end
