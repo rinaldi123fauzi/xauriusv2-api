@@ -14,7 +14,7 @@
 #
 class DepositSerializer < ActiveModel::Serializer
   attributes :id,
-  :name_bank,
+  :bank_id,
   :total,
   :created_at,
   :updated_at,
