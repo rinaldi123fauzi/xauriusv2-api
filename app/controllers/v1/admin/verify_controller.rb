@@ -47,9 +47,12 @@ module V1
                 deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
               }
             }, status: :ok
-          elsif status == "create-file"
+          elsif status == "create"
             deposit.status = status
             deposit.save 
+
+            # TODO: Kirim email kenapa ditolak
+            #       Jadi nanti pada endpoint harus ada text emailnya ketika status ditolak
   
             render json: {
               success: true, 
@@ -62,9 +65,8 @@ module V1
           else
             render json: {success: false, msg: 'Status wajib diisi'}, status: :ok 
           end
-
         else  
-          render json: {success: false, msg: 'Mungkin status sudah terbayar'}, status: :ok
+          render json: {success: false, msg: 'Mungkin status sudah terbayar atau file belum di upload'}, status: :ok
         end
       end
 

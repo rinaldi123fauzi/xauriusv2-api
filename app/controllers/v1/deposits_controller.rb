@@ -23,22 +23,31 @@ module V1
     end
 
     def uploadDeposit
-      @deposits = Deposit.where(user_id: decoded_auth_token[:user_id], status: 'create-file')
-      @deposit = @deposits.first
+      @id = params[:id]
+      @file_deposit = params[:file_deposit]
 
-      if @deposits.count == 1
-        @deposit.file_deposit = params[:file_deposit]
-        @deposit.status       = "file-upload" 
-        if @deposit.save
-          render json: {
-            success: true, 
-            msg:'Deposits is saved', 
-            data: ActiveModelSerializers::SerializableResource.new(@deposit, each_serializer: DepositSerializer)}, status: :ok
-        else
-          render json: {success: false, msg:'Deposits is not saved', data:@deposit.errors}, status: :unprocessable_entity
+      if @file_deposit != nil && @file_deposit != ""
+
+        @deposits = Deposit.where(id: @id, user_id: decoded_auth_token[:user_id], status: 'create')
+
+        if @deposits.count == 1
+          @deposit = @deposits.first
+
+          @deposit.file_deposit = @file_deposit
+          @deposit.status       = "file-upload" 
+          if @deposit.save
+            render json: {
+              success: true, 
+              msg:'Deposits is saved', 
+              data: ActiveModelSerializers::SerializableResource.new(@deposit, each_serializer: DepositSerializer)}, status: :ok
+          else
+            render json: {success: false, msg:'Deposits is not saved', data:@deposit.errors}, status: :unprocessable_entity
+          end
+        else  
+          render json: {success: false, msg:'Data dengan status create tidak ditemukan'}, status: :unprocessable_entity
         end
-      else
-        render json: {success: false, msg:'Mungkin status sudah terbayar'}, status: :unprocessable_entity
+      else  
+        render json: {success: false, msg:'Anda tidak mengupload file'}, status: :unprocessable_entity
       end
     end
 
@@ -47,7 +56,7 @@ module V1
       @deposits.bank_id = params[:bank_id]
       @deposits.total     = params[:total]
       @deposits.user_id   = decoded_auth_token[:user_id]
-      @deposits.status    = "create-file"
+      @deposits.status    = "create"
       if @deposits.save
         render json: {
           success: true, 
