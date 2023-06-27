@@ -7,6 +7,7 @@ module V1
       def approve_deposit 
         deposit_id = params[:deposit_id]
         status = params[:status]
+        description = params[:description]
 
         # cari deposit ID yang sedang file-upload
         deposits = Deposit.where(id: deposit_id, status: 'file-upload')
@@ -48,12 +49,16 @@ module V1
               }
             }, status: :ok
           elsif status == "create"
-            deposit.status = status
+            deposit = deposits.first 
+            @user = User.find_by_id(deposit.user_id)
+            deposit.status      = status
+            deposit.description = description
             deposit.save 
 
             # TODO: Kirim email kenapa ditolak
             #       Jadi nanti pada endpoint harus ada text emailnya ketika status ditolak
   
+            TheMailer.reject_deposit(deposit, @user).deliver_now
             render json: {
               success: true, 
               msg: 'Deposits is pending', 
