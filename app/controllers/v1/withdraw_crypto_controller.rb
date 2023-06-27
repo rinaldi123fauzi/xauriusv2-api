@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      withdraws = WithdrawCrypto.where(user_id: decoded_auth_token[:user_id])
+      withdraws = WithdrawCrypto.where(id: params[:id], user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data detail barhasil diambil.",
