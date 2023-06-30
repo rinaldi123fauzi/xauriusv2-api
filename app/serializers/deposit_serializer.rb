@@ -10,6 +10,7 @@
 #  user_id      :bigint           not null
 #  file_deposit :string
 #  bank_id      :bigint           not null
+#  description  :string
 #
 class DepositSerializer < ActiveModel::Serializer
   attributes :id,
@@ -18,6 +19,7 @@ class DepositSerializer < ActiveModel::Serializer
   :created_at,
   :updated_at,
   :status,
+  :description,
   :user_id,
   :file_deposit_url
 
