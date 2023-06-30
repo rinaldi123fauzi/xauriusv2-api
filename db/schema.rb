@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_27_113744) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -175,7 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_27_113744) do
     t.string "status"
     t.bigint "user_id", null: false
     t.string "file_deposit"
-    t.bigint "bank_id", null: false
+    t.bigint "bank_id"
     t.string "description"
     t.index ["bank_id"], name: "index_deposits_on_bank_id"
     t.index ["user_id"], name: "index_deposits_on_user_id"
@@ -187,6 +187,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_27_113744) do
     t.integer "chain_id"
     t.string "currency_symbol"
     t.text "explorer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "histories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "table"
+    t.bigint "table_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

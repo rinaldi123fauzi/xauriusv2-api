@@ -4,7 +4,7 @@ module V1
       @evm_network = EvmNetwork.all
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: @evm_network
       }
     end

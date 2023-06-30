@@ -8,7 +8,7 @@ module V1
         @bank = Bank.all
         render json: {
           success: true,
-          msg: "Data barhasil diambil.",
+          msg: "Data berhasil diambil.",
           data: @bank
         }
       end

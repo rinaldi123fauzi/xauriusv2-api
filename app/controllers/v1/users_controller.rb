@@ -7,7 +7,7 @@ module V1
       users = User.where(id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserSerializer)
       }
     end
@@ -16,7 +16,7 @@ module V1
       users = User.find(decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data detail barhasil diambil.",
+        msg: "Data detail berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserSerializer)
       }
     end
