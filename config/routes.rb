@@ -168,6 +168,12 @@ Rails.application.routes.draw do
       get 'last-price' => 'charts#last_price'
     end
 
+    # histories
+    scope :histories do 
+      get '/'       => 'histories#index'
+      get 'detail'  => 'histories#show'
+    end
+
     # Bank Users
     scope :bank_users do 
       get 'detail'     => 'bank_users#detail'

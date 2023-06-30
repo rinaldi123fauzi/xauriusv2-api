@@ -1,35 +1,33 @@
 module V1
-  class BalancesController < ApplicationController
+  class HistoriesController < ApplicationController
     include ActionController::Cookies
     before_action :authenticate_request
-    before_action :check_status_kyc
 
     def index
-      @balances = Balance.where(user_id: decoded_auth_token[:user_id])
+      datas = History.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
         msg: "Data berhasil diambil.",
-        data: @balances
+        data: ActiveModelSerializers::SerializableResource.new(datas, each_serializer: HistorySerializer)
+      }
+    end
+
+    def show
+      data = History.where(id: params[:id], user_id: decoded_auth_token[:user_id])
+      render json: {
+        success: true,
+        msg: "Data detail berhasil diambil.",
+        data: ActiveModelSerializers::SerializableResource.new(data, each_serializer: HistorySerializer)
       }
     end
 
     private
+    
     def decoded_auth_token
       if request.headers["JWT"]
         @decoded_auth_token ||= JsonWebToken.decode(request.headers["JWT"])
       else
         @decoded_auth_token ||= JsonWebToken.decode(cookies[:JWT])
-      end
-    end
-
-    def check_status_kyc
-      profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
-      unless profile.status_kyc == "approved"
-        render json: {
-          success: false,
-          status: 401,
-          msg: "Status KYC Anda harus Approve"
-        }
       end
     end
 
@@ -46,5 +44,7 @@ module V1
         msg: "Anda harus login"
       } unless @current_user
     end
+
   end
 end
+  

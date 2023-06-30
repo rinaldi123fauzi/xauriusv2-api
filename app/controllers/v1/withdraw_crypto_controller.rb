@@ -8,7 +8,7 @@ module V1
       withdraws = WithdrawCrypto.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: withdraws
       }
     end
@@ -17,7 +17,7 @@ module V1
       withdraws = WithdrawCrypto.where(id: params[:id], user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data detail barhasil diambil.",
+        msg: "Data detail berhasil diambil.",
         data: withdraws
       }
     end

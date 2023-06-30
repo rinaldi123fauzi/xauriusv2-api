@@ -8,7 +8,7 @@ module V1
       deposits = Deposit.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(deposits, each_serializer: DepositSerializer)
       }
     end
@@ -17,7 +17,7 @@ module V1
       deposits = Deposit.where(id: params[:id], user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(deposits, each_serializer: DepositSerializer)
       }
     end

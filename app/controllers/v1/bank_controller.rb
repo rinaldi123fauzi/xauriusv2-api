@@ -3,7 +3,7 @@ class V1::BankController < ApplicationController
     banks = Bank.all
     render json: {
       success: true,
-      msg: "Data barhasil diambil.",
+      msg: "Data berhasil diambil.",
       data: banks
     }
   end

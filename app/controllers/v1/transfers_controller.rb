@@ -8,7 +8,7 @@ module V1
       transfers = Transfer.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: transfers
       }
     end
@@ -17,7 +17,7 @@ module V1
       transfers = Transfer.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data detail barhasil diambil.",
+        msg: "Data detail berhasil diambil.",
         data: transfers
       }
     end

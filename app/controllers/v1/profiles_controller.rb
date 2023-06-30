@@ -6,7 +6,7 @@ class V1::ProfilesController < ApplicationController
       @profile = Profile.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end
@@ -15,7 +15,7 @@ class V1::ProfilesController < ApplicationController
       @profile = Profile.find_by_user_id(decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data detail barhasil diambil.",
+        msg: "Data detail berhasil diambil.",
         data: ActiveModelSerializers::SerializableResource.new(@profile, each_serializer: ProfileSerializer)
       }
     end

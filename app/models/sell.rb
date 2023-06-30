@@ -11,5 +11,22 @@
 #  amount_idr :decimal(, )
 #
 class Sell < ApplicationRecord
-    belongs_to :user
+
+  after_save :save_to_history
+
+  belongs_to :user
+
+  private 
+
+  def save_to_history 
+    # cek di history, apakah sudah ada datanya
+    thedata = History.where(user_id: self.user_id, table: 'sells', table_id: self.id)
+    if thedata.count == 0
+      History.create({
+        user_id: self.user_id, 
+        table: 'sells', 
+        table_id: self.id
+      })
+    end
+  end
 end
