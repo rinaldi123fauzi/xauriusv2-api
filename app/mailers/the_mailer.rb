@@ -23,5 +23,12 @@ class TheMailer < ApplicationMailer
       @app_type = app_type
       mail(to: @user.email, subject: 'Instruksi reset password')
     end
+
+    # blash reject deposit
+    def reject_deposit(deposit, user)
+      @deposit = deposit
+      @orang = user
+      mail(to: @orang.email, subject: 'Informasi Reject Deposit')
+    end
   
 end

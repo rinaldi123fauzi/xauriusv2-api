@@ -15,4 +15,19 @@
 #  updated_at                   :datetime         not null
 #
 class Ccdeposit < ApplicationRecord
+  after_save :save_to_history
+
+  private 
+
+  def save_to_history 
+    # cek di history, apakah sudah ada datanya
+    thedata = History.where(user_id: self.user_id, table: 'ccdeposits', table_id: self.id)
+    if thedata.count == 0
+      History.create({
+        user_id: self.user_id, 
+        table: 'ccdeposits', 
+        table_id: self.id
+      })
+    end
+  end
 end

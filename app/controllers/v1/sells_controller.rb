@@ -8,16 +8,16 @@ module V1
       sells = Sell.where(user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data barhasil diambil.",
+        msg: "Data berhasil diambil.",
         data: sells
       }
     end
 
     def show
-      sells = Sell.where(user_id: decoded_auth_token[:user_id])
+      sells = Sell.where(id: params[:id], user_id: decoded_auth_token[:user_id])
       render json: {
         success: true,
-        msg: "Data detail barhasil diambil.",
+        msg: "Data detail berhasil diambil.",
         data: sells
       }
     end

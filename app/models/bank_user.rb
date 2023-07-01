@@ -7,7 +7,7 @@
 #  nama_akun      :string
 #  nama_bank      :string
 #  nomor_rekening :string
-#  status         :boolean          default(FALSE)
+#  status         :string           default("unlock")
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
 #
@@ -17,4 +17,5 @@ class BankUser < ApplicationRecord
   validates :nama_akun, presence: true
   validates :nama_bank, presence: true
   validates :nomor_rekening, presence: true
+  validates :status, inclusion: { in: %w(unlock lock), message: "%{value} bukan status yang benar" }
 end

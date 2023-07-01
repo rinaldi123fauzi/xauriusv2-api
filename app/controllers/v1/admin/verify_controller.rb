@@ -6,48 +6,72 @@ module V1
       # KHUSUS UNTUK DEVELOPMENT SAJA 
       def approve_deposit 
         deposit_id = params[:deposit_id]
+        status = params[:status]
+        description = params[:description]
 
-        # cari deposit ID yang sedang menunggu-pembayaran
-        deposits = Deposit.where(id: deposit_id, status: 'menunggu-pembayaran')
+        # cari deposit ID yang sedang file-upload
+        deposits = Deposit.where(id: deposit_id, status: 'file-upload')
 
         if deposits.count == 1 
           # kode lanjut 
-          deposit = deposits.first 
+          if status == "terbayar"
+            deposit = deposits.first 
+  
+            balances = Balance.where(user_id: deposit.user_id, currency: 'IDR')
+  
+            if balances.count == 0
+              Balance.create({
+                user_id: deposit.user_id,
+                currency: 'IDR',
+                balance_value: 0
+              })
+            end
+  
+            balance_obj = Balance.where(user_id: deposit.user_id, currency: 'IDR').first 
+  
+            # balance awal 
+            balance_awal = balance_obj.balance_value
+  
+            balance_after = balance_awal.to_f + deposit.total.to_f
+  
+            balance_obj.balance_value = balance_after
+            balance_obj.save 
+  
+            deposit.status = status
+            deposit.save 
+  
+            render json: {
+              success: true, 
+              msg: 'Deposits is verified', 
+              data: {
+                balance: balance_obj,
+                deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
+              }
+            }, status: :ok
+          elsif status == "create"
+            deposit = deposits.first 
+            @user = User.find_by_id(deposit.user_id)
+            deposit.status      = status
+            deposit.description = description
+            deposit.save 
 
-          balances = Balance.where(user_id: deposit.user_id, currency: 'IDR')
-
-          if balances.count == 0
-            Balance.create({
-              user_id: deposit.user_id,
-              currency: 'IDR',
-              balance_value: 0
-            })
+            # TODO: Kirim email kenapa ditolak
+            #       Jadi nanti pada endpoint harus ada text emailnya ketika status ditolak
+  
+            TheMailer.reject_deposit(deposit, @user).deliver_now
+            render json: {
+              success: true, 
+              msg: 'Deposits is pending', 
+              data: {
+                balance: balance_obj,
+                deposit: ActiveModelSerializers::SerializableResource.new(deposit, each_serializer: DepositSerializer)
+              }
+            }, status: :ok
+          else
+            render json: {success: false, msg: 'Status wajib diisi'}, status: :ok 
           end
-
-          balance_obj = Balance.where(user_id: deposit.user_id, currency: 'IDR').first 
-
-          # balance awal 
-          balance_awal = balance_obj.balance_value
-
-          balance_after = balance_awal.to_f + deposit.total.to_f
-
-          balance_obj.balance_value = balance_after
-          balance_obj.save 
-
-          deposit.status = 'terbayar'
-          deposit.save 
-
-          render json: {
-            success: true, 
-            msg: 'Deposits is verified', 
-            data: {
-              balance: balance_obj,
-              deposit: deposit
-            }
-          }, status: :ok
-
         else  
-          render json: {success: false, msg: 'Mungkin status sudah terbayar'}, status: :ok
+          render json: {success: false, msg: 'Mungkin status sudah terbayar atau file belum di upload'}, status: :ok
         end
       end
 
@@ -166,6 +190,26 @@ module V1
             }, status: :ok
         else
           render json: {success: false, msg: 'Mungkin status sudah selesai'}, status: :ok
+        end
+      end
+
+      # Lock / Unlock Bank Users
+      def bankUser
+        bank_users = BankUser.where(id: params[:bank_user_id])
+        bank_user = bank_users.first
+        bank_user.status = params[:status]
+        if bank_user.save
+          render json:{
+            success: true,
+            msg: "Status bank users is saved",
+            data: bank_users
+          }
+        else
+          render json:{
+            success: false,
+            msg: "Status bank user is not save",
+            data: bank_user.errors
+          }
         end
       end
 

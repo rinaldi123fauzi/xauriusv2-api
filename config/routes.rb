@@ -129,6 +129,7 @@ Rails.application.routes.draw do
         post 'approve-kyc'                    => 'verify#approve_kyc'
         post 'approve-withdraw'               => 'verify#approve_withdraw'
         post 'approve-withdraw-crypto'        => 'verify#approve_withdraw_crypto'
+        post 'lock-unlock-bankuser'           => 'verify#bankUser'
       end
 
       #Bank
@@ -167,11 +168,22 @@ Rails.application.routes.draw do
       get 'last-price' => 'charts#last_price'
     end
 
+    # histories
+    scope :histories do 
+      get '/'       => 'histories#index'
+      get 'detail'  => 'histories#show'
+    end
+
     # Bank Users
     scope :bank_users do 
       get 'detail'     => 'bank_users#detail'
       post 'create'    => 'bank_users#create'
       put 'update'     => 'bank_users#update'
+    end
+
+    # Bank
+    scope :bank do 
+      get '/'     => 'bank#index'
     end
 
     # EvmNetwork
@@ -194,6 +206,7 @@ Rails.application.routes.draw do
       get '/'                                 => 'deposits#index'
       post 'create'                           => 'deposits#create'
       get 'detail'                            => 'deposits#show'
+      post 'upload-file'                      => 'deposits#uploadDeposit'
     end
 
     #Profiles

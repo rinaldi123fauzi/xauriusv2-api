@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -80,7 +80,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
     t.string "nama_akun"
     t.string "nama_bank"
     t.string "nomor_rekening"
-    t.boolean "status", default: false
+    t.string "status", default: "unlock"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_bank_users_on_user_id"
@@ -169,12 +169,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
   end
 
   create_table "deposits", force: :cascade do |t|
-    t.string "name_bank"
     t.decimal "total"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status"
     t.bigint "user_id", null: false
+    t.string "file_deposit"
+    t.bigint "bank_id"
+    t.string "description"
+    t.index ["bank_id"], name: "index_deposits_on_bank_id"
     t.index ["user_id"], name: "index_deposits_on_user_id"
   end
 
@@ -184,6 +187,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
     t.integer "chain_id"
     t.string "currency_symbol"
     t.text "explorer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "histories", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "table"
+    t.bigint "table_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -307,6 +318,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_142235) do
   add_foreign_key "bank_users", "users"
   add_foreign_key "businesses", "users"
   add_foreign_key "buys", "users"
+  add_foreign_key "deposits", "banks"
   add_foreign_key "deposits", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "sells", "users"
