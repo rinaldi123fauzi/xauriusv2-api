@@ -201,12 +201,20 @@ Rails.application.routes.draw do
       get 'detail'                            => 'buys#show'
     end
 
-    #Deposit
+    # Deposit
+    # Deposit disini lebih mengacu kepada deposit Rupiah
     scope :deposits do
       get '/'                                 => 'deposits#index'
       post 'create'                           => 'deposits#create'
       get 'detail'                            => 'deposits#show'
       post 'upload-file'                      => 'deposits#uploadDeposit'
+    end
+
+    # Ccdeposits
+    # Ini adalah Crypto deposit. 
+    scope :ccdeposits do
+      get  '/'                                => 'ccdeposits#index'
+      get  'request-address'                  => 'ccdeposits#request_address'
     end
 
     #Profiles

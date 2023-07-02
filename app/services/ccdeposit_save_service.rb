@@ -20,7 +20,7 @@ class CcdepositSaveService < ApplicationService
       depo = Ccdeposit.new 
       depo.user_id           = @user_id 
       depo.ccdeposit_amount  = @amount 
-      depo.ccdeposit_data    = @data 
+      depo.ccdeposit_data    = @data.to_json 
       depo.ccdeposit_txhash  = @txhash
       depo.ccurrency_symbol  = @currency
       depo.evm_chain_id      = @evm_chain_id
