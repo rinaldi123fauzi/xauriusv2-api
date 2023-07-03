@@ -23,8 +23,10 @@ module V1
     end
 
     def create
+
+      puts params
       
-      orang = balikan[:orang]
+      # orang = balikan[:orang]
 
       # proses parameter 
       otp              = params[:otp]
@@ -32,22 +34,27 @@ module V1
       amount           = params[:amount]
       withdraw_to      = params[:withdraw_to]
       chain_id         = params[:chain_id]
-      contract_address = params[:contract_address].downcase  # CONTRACT ADDRESS DIDAPAT DARI DEPLOY ATAU DARI ENV NANTI
       
       # karena wd fee pada evm tergantung dari chain yang dipilih, kita harus mencari fee terlebih dahulu 
-      block_evm_token_obj = BlockEvmToken.where(chain_id: chain_id, contract_address: contract_address).first 
+      block_evm_token_obj = BlockEvmToken.where(chain_id: chain_id).first 
+
+      contract_address = block_evm_token_obj.contract_address
+
+      puts block_evm_token_obj.to_json
 
       if block_evm_token_obj && block_evm_token_obj.wd_fee > 0
 
         # sebelum kita lanjut, kita harus check chain_id, apakah ada didalam EvmNetwork 
         block_evm_network_objs = EvmNetwork.where(chain_id: chain_id)
 
+        puts block_evm_network_objs.to_json
+
         if block_evm_network_objs.count > 0
 
           block_evm_network_obj = block_evm_network_objs.first 
 
           # TODO: CEK apakah ethreum address valid atau tidak
-          @wd_service_res = WithdrawGeneralService.call(decoded_auth_token[:user_id], currency, amount, withdraw_to, destinationtag, nil, 'OTP', block_evm_token_obj.wd_fee)
+          @wd_service_res = WithdrawGeneralService.call(decoded_auth_token[:user_id], currency, amount, withdraw_to, nil, 'OTP', block_evm_token_obj.wd_fee)
       
           if @wd_service_res[:success] == true 
 

@@ -269,7 +269,10 @@ Rails.application.routes.draw do
       post 'erc20-withdraw' => 'evms#erc20_withdraw'
     end
 
-    
+    # OTP
+    scope :otps do
+      post 'create'  => 'otps#create'
+    end
 
     
   end
