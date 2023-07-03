@@ -145,7 +145,7 @@ class V1::ProfilesController < ApplicationController
         success: false,
         status: 401,
         msg: "Anda harus login"
-      } unless @current_user
+      }, status: 401 unless @current_user
     end
 
 end
