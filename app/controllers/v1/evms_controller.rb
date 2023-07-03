@@ -38,7 +38,6 @@ class V1::EvmsController < ApplicationController
         wallet = wallets.first 
 
         if wallet.user_id != 0
-
           # dari wallet, ketahuan siapa yang punya address 
           user_id = wallet.user_id
 

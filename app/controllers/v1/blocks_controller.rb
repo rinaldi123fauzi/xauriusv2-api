@@ -219,7 +219,7 @@ class V1::BlocksController < ApplicationController
     db_name = params[:db_name]
     tbl_id  = params[:tbl_id]
 
-    if params[:password] == "sklIewrjen8327487328457ksdfdksnf"
+    if params[:password] == ENV['ADDR_LOAD_PASSWORD']
 
       # periksa apakah address sudah ada 
       datas = BlockEthAddr.where(address: address)

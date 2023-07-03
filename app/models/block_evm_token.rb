@@ -14,5 +14,9 @@
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
+
+# TODO: 
+#   - Apakah hapus currency_id?
+#   - Apakah hapus wd_fee
 class BlockEvmToken < ApplicationRecord
 end
