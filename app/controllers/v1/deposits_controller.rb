@@ -52,18 +52,23 @@ module V1
     end
 
     def create
-      @deposits = Deposit.new
-      @deposits.bank_id = params[:bank_id]
-      @deposits.total     = params[:total]
-      @deposits.user_id   = decoded_auth_token[:user_id]
-      @deposits.status    = "create"
-      if @deposits.save
-        render json: {
-          success: true, 
-          msg:'Deposits is saved', 
-          data: ActiveModelSerializers::SerializableResource.new(@deposits, each_serializer: DepositSerializer)}, status: :ok
+      bank_users = BankUser.where(user_id: decoded_auth_token[:user_id], status: 'lock')
+      if bank_users.count == 1
+        @deposits = Deposit.new
+        @deposits.bank_id = params[:bank_id]
+        @deposits.total     = params[:total]
+        @deposits.user_id   = decoded_auth_token[:user_id]
+        @deposits.status    = "create"
+        if @deposits.save
+          render json: {
+            success: true, 
+            msg:'Deposits is saved', 
+            data: ActiveModelSerializers::SerializableResource.new(@deposits, each_serializer: DepositSerializer)}, status: :ok
+        else
+          render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
+        end
       else
-        render json: {success: false, msg:'Deposits is not saved', data:@deposits.errors}, status: :unprocessable_entity
+        render json: {success: false, msg:'Bank user belum ada di lock'}, status: :unprocessable_entity
       end
     end
 
