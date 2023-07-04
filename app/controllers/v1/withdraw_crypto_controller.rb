@@ -73,10 +73,6 @@ module V1
 
             if withdraw_obj 
 
-              puts contract_address 
-              puts withdraw_to
-              puts withdraw_obj.amount_after_fee
-              puts block_evm_network_obj.rpc_url
 
               # TODO: buat new theread karena ini bisa hold koneksi cukup lama
               # langsung minta transfer erc20
