@@ -59,6 +59,9 @@ class EvmTokenTransferService  < ApplicationService
   # }
   # TODO: Ganti dengan call URL internal saja!
   def call  
+
+    puts ENV.fetch('DOMAIN_BC_EVM')
+    
     res = HTTParty.post(
       "#{ENV.fetch('DOMAIN_BC_EVM')}/v1/token/transfer", 
       :headers => {'Content-Type'=>'application/json'}, 

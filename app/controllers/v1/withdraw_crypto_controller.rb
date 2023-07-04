@@ -54,28 +54,44 @@ module V1
           block_evm_network_obj = block_evm_network_objs.first 
 
           # TODO: CEK apakah ethreum address valid atau tidak
-          @wd_service_res = WithdrawGeneralService.call(decoded_auth_token[:user_id], currency, amount, withdraw_to, nil, 'OTP', block_evm_token_obj.wd_fee)
+          @wd_service_res = WithdrawGeneralService.call(
+            decoded_auth_token[:user_id], 
+            currency, 
+            amount,
+            withdraw_to, 
+            otp, 
+            nil, 
+            block_evm_token_obj.wd_fee,
+            chain_id,
+            contract_address
+          )
       
           if @wd_service_res[:success] == true 
 
             # edit data withdraw ini 
-            withdraw_obj = Withdraw.find(@wd_service_res[:withdraw][:id])
+            withdraw_obj = WithdrawCrypto.find(@wd_service_res[:withdraw][:id])
 
             if withdraw_obj 
 
+              puts contract_address 
+              puts withdraw_to
+              puts withdraw_obj.amount_after_fee
+              puts block_evm_network_obj.rpc_url
+
               # TODO: buat new theread karena ini bisa hold koneksi cukup lama
               # langsung minta transfer erc20
-              balikan = EvmTokenTransferService.call(block_evm_token_obj.contract_address, withdraw_to, withdraw_obj.withdraw_amount_after_fee, block_evm_network_obj.rpc_url)
+              balikan = EvmTokenTransferService.call(contract_address, withdraw_to, withdraw_obj.amount_after_fee, block_evm_network_obj.rpc_url)
 
               if balikan['success'] == true 
 
-                withdraw_obj.withdraw_txhash = balikan['data']['transactionHash']
-                withdraw_obj.withdraw_status = 'close'
+                withdraw_obj.txhash = balikan['data']['transactionHash']
+                withdraw_obj.status = 'close'
                 withdraw_obj.save 
 
                 render json: {
                   success: true, 
-                  msg: 'mantap'
+                  msg: 'Wihtdraw Crypto berhasil',
+                  data: withdraw_obj
                 }
               else  
                 app_fail_render(balikan[:msg])
