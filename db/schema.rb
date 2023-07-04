@@ -175,7 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
     t.string "status"
     t.bigint "user_id", null: false
     t.string "file_deposit"
-    t.bigint "bank_id"
+    t.bigint "bank_id", null: false
     t.string "description"
     t.index ["bank_id"], name: "index_deposits_on_bank_id"
     t.index ["user_id"], name: "index_deposits_on_user_id"
