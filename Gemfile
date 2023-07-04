@@ -84,6 +84,7 @@ gem 'rack-cors'
 gem 'active_model_serializers'
 gem "aws-sdk-s3", require: false
 gem 'resque'
+gem 'resque-scheduler'
 gem 'rack-attack' # cegah brute force
 gem "google-authenticator-rails"
 gem 'exception_notification'

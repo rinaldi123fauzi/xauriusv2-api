@@ -187,7 +187,9 @@ Rails.application.routes.draw do
     end
 
     # EvmNetwork
-    get 'evm-networks'                        => 'evm_networks#index'
+    get 'evm-networks'  => 'evm_networks#index'
+
+    get 'evm-tokens' => 'evm_tokens#index'
 
     #Balances
     scope :balances do
@@ -265,6 +267,11 @@ Rails.application.routes.draw do
     scope :evms do
       post 'erc20-deposit'  => 'evms#erc20_deposit'
       post 'erc20-withdraw' => 'evms#erc20_withdraw'
+    end
+
+    # OTP
+    scope :otps do
+      post 'create'  => 'otps#create'
     end
 
     

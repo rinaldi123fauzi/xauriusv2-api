@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_04_143117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -175,7 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
     t.string "status"
     t.bigint "user_id", null: false
     t.string "file_deposit"
-    t.bigint "bank_id", null: false
+    t.bigint "bank_id"
     t.string "description"
     t.index ["bank_id"], name: "index_deposits_on_bank_id"
     t.index ["user_id"], name: "index_deposits_on_user_id"
@@ -219,6 +219,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
     t.string "google_secret"
     t.string "reset_google_secret_token"
     t.string "two_factor_is_active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "otps", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "otp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -287,14 +294,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
   end
 
   create_table "withdraw_cryptos", force: :cascade do |t|
-    t.decimal "xau_amount"
     t.string "status"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "address"
-    t.bigint "evm_network_id", null: false
-    t.index ["evm_network_id"], name: "index_withdraw_cryptos_on_evm_network_id"
+    t.string "to_address"
+    t.bigint "chain_id", null: false
+    t.string "currency"
+    t.decimal "amount", default: "0.0"
+    t.decimal "amount_after_fee", default: "0.0"
+    t.string "txhash"
+    t.string "contract_address"
+    t.decimal "fee", default: "0.0"
+    t.index ["chain_id"], name: "index_withdraw_cryptos_on_chain_id"
     t.index ["user_id"], name: "index_withdraw_cryptos_on_user_id"
   end
 
@@ -323,7 +335,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_30_091320) do
   add_foreign_key "profiles", "users"
   add_foreign_key "sells", "users"
   add_foreign_key "transfers", "users"
-  add_foreign_key "withdraw_cryptos", "evm_networks"
   add_foreign_key "withdraw_cryptos", "users"
   add_foreign_key "withdraws", "banks"
   add_foreign_key "withdraws", "users"
