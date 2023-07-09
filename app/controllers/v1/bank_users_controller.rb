@@ -88,7 +88,7 @@ module V1
           success: false,
           status: 401,
           msg: "Status KYC Anda harus Approve"
-        }
+        }, status: 401
       end
     end
 

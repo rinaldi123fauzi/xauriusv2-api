@@ -391,7 +391,7 @@ module V1
       render json: {
         success: false,
         msg: msg
-      }
+      }, status: 401
     end
 
     private 
