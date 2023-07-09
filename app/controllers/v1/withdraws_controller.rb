@@ -27,7 +27,7 @@ module V1
       @balance = @checkBalances.first
 
       @withdraws = Withdraw.new
-      @withdraws.bank_id = params[:bank_id]
+      @withdraws.bank_user_id = params[:bank_id]
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]

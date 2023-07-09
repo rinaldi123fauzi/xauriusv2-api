@@ -10,7 +10,6 @@
 #  number_rekening :string
 #
 class Bank < ApplicationRecord
-    has_many :withdraw
     validates :name_bank, uniqueness: true, presence: true
     validates :name_account, presence: true
     validates :number_rekening, uniqueness: true, presence: true

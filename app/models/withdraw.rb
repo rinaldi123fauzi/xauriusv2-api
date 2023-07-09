@@ -3,7 +3,6 @@
 # Table name: withdraws
 #
 #  id             :bigint           not null, primary key
-#  name_bank      :string
 #  account_number :string
 #  ammount        :decimal(, )
 #  created_at     :datetime         not null
@@ -11,14 +10,14 @@
 #  status         :string
 #  user_id        :bigint           not null
 #  name           :string
-#  bank_id        :bigint           not null
+#  bank_user_id   :bigint           not null
 #
 class Withdraw < ApplicationRecord
 
   after_save :save_to_history
 
   belongs_to :user
-  belongs_to :bank
+  belongs_to :bank_user
   validates :status, inclusion: { in: %w(sedang-diproses selesai), allow_nil: true, message: "%{value} bukan status yang benar" }
 
   private 

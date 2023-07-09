@@ -13,7 +13,7 @@
 #
 class BankUser < ApplicationRecord
   belongs_to :user
-
+  has_many :withdraw
   validates :nama_akun, presence: true
   validates :nama_bank, presence: true
   validates :nomor_rekening, presence: true

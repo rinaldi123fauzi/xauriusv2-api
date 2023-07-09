@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_09_075545) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_09_084938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -311,7 +311,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_09_075545) do
   end
 
   create_table "withdraws", force: :cascade do |t|
-    t.string "name_bank"
     t.string "account_number"
     t.decimal "ammount"
     t.datetime "created_at", null: false
@@ -319,8 +318,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_09_075545) do
     t.string "status"
     t.bigint "user_id", null: false
     t.string "name"
-    t.bigint "bank_id", null: false
-    t.index ["bank_id"], name: "index_withdraws_on_bank_id"
+    t.bigint "bank_user_id", null: false
+    t.index ["bank_user_id"], name: "index_withdraws_on_bank_user_id"
     t.index ["user_id"], name: "index_withdraws_on_user_id"
   end
 
@@ -336,6 +335,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_09_075545) do
   add_foreign_key "sells", "users"
   add_foreign_key "transfers", "users"
   add_foreign_key "withdraw_cryptos", "users"
-  add_foreign_key "withdraws", "banks"
+  add_foreign_key "withdraws", "bank_users"
   add_foreign_key "withdraws", "users"
 end
