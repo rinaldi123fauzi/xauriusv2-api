@@ -104,12 +104,12 @@ module V1
         if(@email =~ valid_email_regex) == 0
           if User.where(email: @email).count == 0
   
-            random_num = Random.new.rand(10000..100000)
+            random_num = Random.new.rand(10000..10000)
   
             @ora               = User.new
             @ora.email         = @email
             @ora.password      = @password
-            @ora.name_nick     = "u#{Random.new.rand(10000..100000)}"  # ini gak harus unik
+            @ora.name_nick     = "u#{Random.new.rand(10000..10000)}"  # ini gak harus unik
             @ora.gender        = "male"
             @ora.phone_valid   = false
             @ora.email_vercode = random_num
@@ -247,7 +247,7 @@ module V1
         if @orang.is_email_verify == true
           app_fail_render("Email already verified. Please log in or request a password reset instruction if you forgot your password")
         else
-          random_num = Random.new.rand(10000..100000)
+          random_num = Random.new.rand(10000..10000)
 
           @orang.email_vercode = random_num
           @orang.save
@@ -290,7 +290,7 @@ module V1
 
         # jika lewat mobile, metodenya lain
         if @app_type == 'mobile'
-          @random_number = Random.new.rand(10000..100000)
+          @random_number = Random.new.rand(10000..10000)
         else  
           @random_number = SecureRandom.hex(13)
         end
