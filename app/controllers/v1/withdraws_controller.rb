@@ -34,7 +34,7 @@ module V1
       @withdraws.status = "sedang-diproses"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @balance.balance_value >= params[:ammount].to_f
+      if @balance.balance_value.to_f >= params[:ammount].to_f
         if @withdraws.save
           render json: {
               success: true, 

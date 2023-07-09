@@ -4,7 +4,7 @@
 #
 #  id             :bigint           not null, primary key
 #  name_bank      :string
-#  account_number :integer
+#  account_number :string
 #  ammount        :decimal(, )
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null

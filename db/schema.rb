@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_04_143117) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_09_075545) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -175,7 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_04_143117) do
     t.string "status"
     t.bigint "user_id", null: false
     t.string "file_deposit"
-    t.bigint "bank_id"
+    t.bigint "bank_id", null: false
     t.string "description"
     t.index ["bank_id"], name: "index_deposits_on_bank_id"
     t.index ["user_id"], name: "index_deposits_on_user_id"
@@ -312,7 +312,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_04_143117) do
 
   create_table "withdraws", force: :cascade do |t|
     t.string "name_bank"
-    t.integer "account_number"
+    t.string "account_number"
     t.decimal "ammount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
