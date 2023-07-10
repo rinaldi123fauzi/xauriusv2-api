@@ -5,7 +5,7 @@ module V1
     before_action :check_status_kyc
 
     def index
-      buys = Buy.where(user_id: decoded_auth_token[:user_id])
+      buys = Buy.where(user_id: decoded_auth_token[:user_id]).order(:id => :desc)
       render json: {
         success: true,
         msg: "Data berhasil diambil.",
@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      buys = Buy.where(id: params[:id], user_id: decoded_auth_token[:user_id])
+      buys = Buy.where(id: params[:id], user_id: decoded_auth_token[:user_id]).order(:id => :desc)
       render json: {
         success: true,
         msg: "Data detail berhasil diambil.",
