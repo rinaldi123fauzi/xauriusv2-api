@@ -12,18 +12,31 @@ class V1::OtpsController < ApplicationController
     users = User.where(id: user_id)
 
     otps = Otp.where(user_id: user_id)
+    otp = otps.first
 
     if otps.count > 0 
-      render json: {
-        success: false,
-        msg: "Anda masih mempunyai OTP yang belum kadaluarsa. Silahkan cek email"
-      }
+      expired_at = (Time.current - otp.expired_at) / 1.minutes
+
+      # cek OTP apakah sudah lebih dari 3 menit
+      if expired_at > 3
+        Otp.find_by_user_id(user_id).destroy
+        render json: {
+          success: false,
+          msg: "Maaf OTP Anda sudah kadaluarsa. Silahkan request kembali"
+        }  
+      else
+        render json: {
+          success: false,
+          msg: "Anda masih mempunyai OTP yang belum kadaluarsa. Silahkan cek email"
+        }
+      end
     else  
-      acak = rand(100000..1000000)
+      acak = rand(10000..99999)
 
       data = Otp.new
       data.user_id = user_id
       data.otp = acak
+      data.expired_at = Time.current
       data.save 
 
       puts data.to_json

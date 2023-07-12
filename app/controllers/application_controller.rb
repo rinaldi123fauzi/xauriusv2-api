@@ -34,7 +34,7 @@ class ApplicationController < ActionController::API
           success: false,
           status: 401,
           msg: "Status KYC Anda harus Approve"
-        }
+        }, status: 401
       end
     end
   
@@ -57,7 +57,7 @@ class ApplicationController < ActionController::API
         success: false,
         status: 401,
         msg: "Anda harus login"
-      } unless @current_user
+      }, status: 401 unless @current_user
     end
 
 end 

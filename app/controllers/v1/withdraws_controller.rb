@@ -5,7 +5,7 @@ module V1
     before_action :check_status_kyc
 
     def index
-      withdraws = Withdraw.where(user_id: decoded_auth_token[:user_id])
+      withdraws = Withdraw.where(user_id: decoded_auth_token[:user_id]).order(:id => :desc)
       render json: {
         success: true,
         msg: "Data berhasil diambil.",
@@ -14,7 +14,7 @@ module V1
     end
 
     def show
-      withdraws = Withdraw.where(id: params[:id], user_id: decoded_auth_token[:user_id])
+      withdraws = Withdraw.where(id: params[:id], user_id: decoded_auth_token[:user_id]).order(:id => :desc)
       render json: {
         success: true,
         msg: "Data detail berhasil diambil.",
@@ -27,14 +27,14 @@ module V1
       @balance = @checkBalances.first
 
       @withdraws = Withdraw.new
-      @withdraws.bank_id = params[:bank_id]
+      @withdraws.bank_user_id = params[:bank_id]
       @withdraws.account_number = params[:account_number]
       @withdraws.name = params[:name]
       @withdraws.ammount = params[:ammount]
       @withdraws.status = "sedang-diproses"
       @withdraws.user_id = decoded_auth_token[:user_id]
 
-      if @balance.balance_value >= params[:ammount].to_f
+      if @balance.balance_value.to_f >= params[:ammount].to_f
         if @withdraws.save
           render json: {
               success: true, 

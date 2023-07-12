@@ -7,6 +7,7 @@
 #  otp        :bigint
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  expired_at :datetime
 #
 class Otp < ApplicationRecord
 end
